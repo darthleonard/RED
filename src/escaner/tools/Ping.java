@@ -108,7 +108,7 @@ public class Ping extends SwingWorker<Void, Void>{
                 jpb.setValue(i);
                 txt.append(status.concat("\n"));
                 txt.setCaretPosition(txt.getDocument().getLength());
-                lbl.setText(cont + " de " + i + " hosts activos");
+                lbl.setText(cont + " hosts de activos de " + i);
                 i++;
             }
             
