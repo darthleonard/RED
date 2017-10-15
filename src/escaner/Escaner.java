@@ -149,6 +149,16 @@ public class Escaner extends javax.swing.JFrame {
         }
     }
     
+    private void eliminaRegistrosSeleccionados() {
+        System.out.println("buscar y eliminar registros");
+        DefaultTableModel dtm = (DefaultTableModel) tblHosts.getModel();
+        int[] a = tblHosts.getSelectedRows();
+        for (int i = a.length-1; i >= 0; i--) {
+            System.out.println(i + " " + a[i]);
+            dtm.removeRow(a[i]);
+        }
+    }
+    
     private void revisarRed() {
         PingFrame p = new PingFrame();
         p.setVisible(true);
@@ -195,6 +205,7 @@ public class Escaner extends javax.swing.JFrame {
         btnArp = new javax.swing.JLabel();
         btnPing = new javax.swing.JLabel();
         btnConfig = new javax.swing.JLabel();
+        btnEliminarRegistros = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmArchivo = new javax.swing.JMenu();
         itmGuardar = new javax.swing.JMenuItem();
@@ -287,6 +298,18 @@ public class Escaner extends javax.swing.JFrame {
             }
         });
 
+        btnEliminarRegistros.setText("X");
+        btnEliminarRegistros.setToolTipText("Configuracion");
+        btnEliminarRegistros.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnEliminarRegistros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnEliminarRegistrosMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnEliminarRegistrosMouseReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -299,6 +322,8 @@ public class Escaner extends javax.swing.JFrame {
                 .addComponent(btnPing)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnConfig)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEliminarRegistros)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
@@ -312,18 +337,20 @@ public class Escaner extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnPing)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(lblIpRed))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(lblMascaraRed)))
-                .addComponent(btnConfig))
             .addComponent(btnGuardar)
             .addComponent(btnArp)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(btnEliminarRegistros)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(lblIpRed))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(lblMascaraRed)))
+                    .addComponent(btnConfig)))
         );
 
         jmArchivo.setMnemonic('K');
@@ -463,6 +490,15 @@ public class Escaner extends javax.swing.JFrame {
     private void itmAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAyudaActionPerformed
         
     }//GEN-LAST:event_itmAyudaActionPerformed
+
+    private void btnEliminarRegistrosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarRegistrosMousePressed
+        animaBoton(btnEliminarRegistros, true);
+    }//GEN-LAST:event_btnEliminarRegistrosMousePressed
+
+    private void btnEliminarRegistrosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarRegistrosMouseReleased
+        animaBoton(btnEliminarRegistros, false);
+        eliminaRegistrosSeleccionados();
+    }//GEN-LAST:event_btnEliminarRegistrosMouseReleased
     
     public String BuscaAnterior(String aux) {
         for (int i = 0; i < registros.size(); i++) {
@@ -503,6 +539,7 @@ public class Escaner extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnArp;
     private javax.swing.JLabel btnConfig;
+    private javax.swing.JLabel btnEliminarRegistros;
     private javax.swing.JLabel btnGuardar;
     private javax.swing.JLabel btnPing;
     private javax.swing.JMenuItem itmAcerca;

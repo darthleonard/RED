@@ -143,8 +143,9 @@ public class Tool {
                 br.read(mac);
                 a = new String(ip);
                 b = new String(mac);
-                if(!b.contains("("))
-                    datos.add(new String[]{a, b, ""});
+                //if(!b.contains("("))
+                if(!a.toUpperCase().contains("INT"))
+                    datos.add(new String[]{a, b.toUpperCase(), ""});
                 br.readLine();
             }
         } else
