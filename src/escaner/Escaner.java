@@ -298,8 +298,8 @@ public class Escaner extends javax.swing.JFrame {
             }
         });
 
-        btnEliminarRegistros.setText("X");
-        btnEliminarRegistros.setToolTipText("Configuracion");
+        btnEliminarRegistros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eliminar.png"))); // NOI18N
+        btnEliminarRegistros.setToolTipText("Eliminar");
         btnEliminarRegistros.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnEliminarRegistros.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
