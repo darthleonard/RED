@@ -16,11 +16,17 @@
  */
 package escaner;
 
+import escaner.tools.Adaptador;
 import escaner.tools.Tool;
 import escaner.tools.Archivos;
+import escaner.tools.NetworkInfo;
 import java.awt.Color;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +48,8 @@ public class Escaner extends javax.swing.JFrame {
     public static final int NUEVO = 3;
     public static final int NOIDENTIFICADO = 4;
     
+    ArrayList<Adaptador> interfaces;
+    
     private final String cabecera[] = new String[]{"", "IP", "MAC", "Descripcion",""};
     ArrayList<String[]> registros;
     TableModel tabla;
@@ -52,9 +60,37 @@ public class Escaner extends javax.swing.JFrame {
     public Escaner() {
         initComponents();
         setLocationRelativeTo(null);
+        try {
+            cargaInterfaces();
+        } catch (SocketException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "ERROR",
+                    "No se pudieron cargar todas las interfaces",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
         
         tabla = tblHosts.getModel();
         cargarTablaInicial();
+    }
+    
+    public void cargaInterfaces() throws SocketException {
+        interfaces = new ArrayList<>();
+        Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+        NetworkInfo ni;
+        Adaptador adaptador;
+        
+    	while (en.hasMoreElements()) {
+            NetworkInterface networkAdapter = en.nextElement();
+            if(networkAdapter.isUp() && !networkAdapter.isLoopback()) {
+                adaptador = new Adaptador(networkAdapter);
+                interfaces.add(adaptador);
+                cmbInterfaces.addItem(adaptador.getId() + " : " + adaptador.getNombre());
+            }
+    	}
+        
+        actualizaDatosRed();
     }
     
     public void cargarTablaInicial() {
@@ -206,10 +242,13 @@ public class Escaner extends javax.swing.JFrame {
         btnPing = new javax.swing.JLabel();
         btnConfig = new javax.swing.JLabel();
         btnEliminarRegistros = new javax.swing.JLabel();
+        cmbInterfaces = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmArchivo = new javax.swing.JMenu();
         itmGuardar = new javax.swing.JMenuItem();
+        jmHerramientas = new javax.swing.JMenu();
         itmTablaArp = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         itmPing = new javax.swing.JMenuItem();
         jmAyuda = new javax.swing.JMenu();
         itmAyuda = new javax.swing.JMenuItem();
@@ -242,13 +281,13 @@ public class Escaner extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setText("Direccion de red");
+        jLabel1.setText("Direccion de red:");
 
-        jLabel2.setText("Mascara de red");
+        jLabel2.setText("Mascara de red:");
 
         lblIpRed.setText("192.168.1.0");
 
-        lblMascaraRed.setText("255.255.255.0");
+        lblMascaraRed.setText("24");
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/guardar.png"))); // NOI18N
         btnGuardar.setToolTipText("Guardar");
@@ -310,6 +349,12 @@ public class Escaner extends javax.swing.JFrame {
             }
         });
 
+        cmbInterfaces.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbInterfacesItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -325,32 +370,36 @@ public class Escaner extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEliminarRegistros)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblIpRed)
-                    .addComponent(lblMascaraRed))
-                .addContainerGap())
+                    .addComponent(cmbInterfaces, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblIpRed)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblMascaraRed)
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnPing)
-            .addComponent(btnGuardar)
-            .addComponent(btnArp)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addComponent(btnEliminarRegistros)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(lblIpRed))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(lblMascaraRed)))
-                    .addComponent(btnConfig)))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGuardar)
+                    .addComponent(btnArp)
+                    .addComponent(btnEliminarRegistros)
+                    .addComponent(btnPing)
+                    .addComponent(btnConfig))
+                .addGap(0, 5, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(cmbInterfaces, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblIpRed)
+                    .addComponent(jLabel2)
+                    .addComponent(lblMascaraRed)
+                    .addComponent(jLabel1)))
         );
 
         jmArchivo.setMnemonic('K');
@@ -365,6 +414,10 @@ public class Escaner extends javax.swing.JFrame {
         });
         jmArchivo.add(itmGuardar);
 
+        jMenuBar1.add(jmArchivo);
+
+        jmHerramientas.setText("Herramientas");
+
         itmTablaArp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         itmTablaArp.setText("Cargar tabla ARP");
         itmTablaArp.setToolTipText("");
@@ -373,7 +426,16 @@ public class Escaner extends javax.swing.JFrame {
                 itmTablaArpActionPerformed(evt);
             }
         });
-        jmArchivo.add(itmTablaArp);
+        jmHerramientas.add(itmTablaArp);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Limpiar tabla ARP");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jmHerramientas.add(jMenuItem1);
 
         itmPing.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         itmPing.setText("Ping sobre red");
@@ -382,9 +444,9 @@ public class Escaner extends javax.swing.JFrame {
                 itmPingActionPerformed(evt);
             }
         });
-        jmArchivo.add(itmPing);
+        jmHerramientas.add(itmPing);
 
-        jMenuBar1.add(jmArchivo);
+        jMenuBar1.add(jmHerramientas);
 
         jmAyuda.setText("Ayuda");
 
@@ -413,7 +475,7 @@ public class Escaner extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -424,7 +486,7 @@ public class Escaner extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -499,6 +561,41 @@ public class Escaner extends javax.swing.JFrame {
         animaBoton(btnEliminarRegistros, false);
         eliminaRegistrosSeleccionados();
     }//GEN-LAST:event_btnEliminarRegistrosMouseReleased
+
+    private void cmbInterfacesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbInterfacesItemStateChanged
+        actualizaDatosRed();
+    }//GEN-LAST:event_cmbInterfacesItemStateChanged
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        limpiarTablaArp();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    
+    private void limpiarTablaArp() {
+        Tool t = new Tool();
+        try {
+            t.LimpiaArp();
+            JOptionPane.showMessageDialog(this, "La cache ARP del equipo ha sido limpiada");
+        } catch (IOException ex) {
+            Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void actualizaDatosRed() {
+        Adaptador a = interfaces.get(cmbInterfaces.getSelectedIndex());
+        String ipRed;
+        String mask;
+        if(a.isSupported()) {
+            NetworkInfo netinfo = new NetworkInfo(a.getIp(), a.getMask());
+            ipRed = netinfo.getNetwork();
+            mask = "" + netinfo.getMask();
+        } else {
+            ipRed = a.getIp();
+            mask = "" + a.getMask();
+        }
+        
+        lblIpRed.setText(ipRed);
+        lblMascaraRed.setText(mask);
+    }
     
     public String BuscaAnterior(String aux) {
         for (int i = 0; i < registros.size(); i++) {
@@ -542,6 +639,7 @@ public class Escaner extends javax.swing.JFrame {
     private javax.swing.JLabel btnEliminarRegistros;
     private javax.swing.JLabel btnGuardar;
     private javax.swing.JLabel btnPing;
+    private javax.swing.JComboBox<String> cmbInterfaces;
     private javax.swing.JMenuItem itmAcerca;
     private javax.swing.JMenuItem itmAyuda;
     private javax.swing.JMenuItem itmGuardar;
@@ -550,11 +648,13 @@ public class Escaner extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenu jmArchivo;
     private javax.swing.JMenu jmAyuda;
+    private javax.swing.JMenu jmHerramientas;
     private javax.swing.JLabel lblIpRed;
     private javax.swing.JLabel lblMascaraRed;
     private javax.swing.JTable tblHosts;

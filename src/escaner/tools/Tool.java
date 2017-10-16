@@ -85,6 +85,19 @@ public class Tool {
         return sb.toString();
     }
     
+    public void LimpiaArp() throws IOException {
+        String comando = null;
+        String so = System.getProperty("os.name");
+        
+        if(so.equals("Linux")) {
+            comando = new String("ip -s -s neigh flush all");
+        } else {
+            comando = new String("cmd /c netsh interface ip delete arpcache");
+        }
+        
+        Runtime.getRuntime().exec(comando);
+    }
+    
     public void Arp() {
         try {
             datos.add(datosLocales());
