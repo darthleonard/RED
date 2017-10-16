@@ -188,13 +188,10 @@ public class Escaner extends javax.swing.JFrame {
     }
     
     private void eliminaRegistrosSeleccionados() {
-        System.out.println("buscar y eliminar registros");
         DefaultTableModel dtm = (DefaultTableModel) tblHosts.getModel();
         int[] a = tblHosts.getSelectedRows();
-        for (int i = a.length-1; i >= 0; i--) {
-            System.out.println(i + " " + a[i]);
+        for (int i = a.length-1; i >= 0; i--)
             dtm.removeRow(a[i]);
-        }
     }
     
     private void revisarRed() {
