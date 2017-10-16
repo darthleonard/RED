@@ -16,6 +16,7 @@
  */
 package escaner.tools;
 
+import java.io.UnsupportedEncodingException;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -38,7 +39,11 @@ public class Adaptador {
     public Adaptador(NetworkInterface ni) throws SocketException {
         id = ni.getName();
         nombre = ni.getDisplayName();
-        mac = ni.getHardwareAddress().toString();
+        try {
+            mac = new String(ni.getHardwareAddress(), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            mac = ni.getHardwareAddress().toString();
+        }
         mtu = ni.getMTU();
 
         List<InterfaceAddress> list = ni.getInterfaceAddresses();
