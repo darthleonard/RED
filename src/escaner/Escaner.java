@@ -61,6 +61,7 @@ public class Escaner extends javax.swing.JFrame {
      */
     public Escaner() {
         initComponents();
+        setIconImage(getEscanerIcon());
         setLocationRelativeTo(null);
         try {
             cargaInterfaces();
@@ -198,7 +199,7 @@ public class Escaner extends javax.swing.JFrame {
     }
     
     private void revisarRed() {
-        PingFrame p = new PingFrame();
+        PingFrame p = new PingFrame(lblIpRed.getText(), lblMascaraRed.getText());
         p.setVisible(true);
     }
     
@@ -228,6 +229,10 @@ public class Escaner extends javax.swing.JFrame {
         Image retValue = Toolkit.getDefaultToolkit().
         getImage(ClassLoader.getSystemResource("images/icono.png"));
         return retValue;
+    }
+    
+    public Image getEscanerIcon() {
+        return Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icono.png"));
     }
     
     /**
@@ -266,7 +271,8 @@ public class Escaner extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de equipos en red");
-        setIconImage(getIconImage());
+        setName("frameMain"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(600, 330));
 
         tblHosts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
