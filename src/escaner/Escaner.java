@@ -21,6 +21,8 @@ import escaner.tools.Tool;
 import escaner.tools.Archivos;
 import escaner.tools.NetworkInfo;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.NetworkInterface;
@@ -220,6 +222,13 @@ public class Escaner extends javax.swing.JFrame {
             btn.setBorder(b);
         }
     }
+
+    @Override
+    public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().
+        getImage(ClassLoader.getSystemResource("images/icono.png"));
+        return retValue;
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -257,6 +266,7 @@ public class Escaner extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de equipos en red");
+        setIconImage(getIconImage());
 
         tblHosts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
