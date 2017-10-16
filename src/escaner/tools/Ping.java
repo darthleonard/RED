@@ -21,7 +21,6 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.StringTokenizer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -29,21 +28,17 @@ import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
 public class Ping extends SwingWorker<Void, Void>{
-    PingFrame pf;
+    private PingFrame pf;
     private JProgressBar jpb;
     private JTextArea txt;
     private JLabel lbl;
     private JButton btn;
     private Container c;
     
+    private NetworkInfo netinfo;
+    
     private int tiempo = 100;
-    private String red;
-    private int mask = 24;
     
-    private int hosts = 0;
-    
-    private int A,B,C,D;
-
     public Ping(PingFrame pf, JProgressBar jpb, JTextArea txt, JLabel lbl, JButton btn, Container c) {
         this.pf = pf;
         this.jpb = jpb;
@@ -51,35 +46,6 @@ public class Ping extends SwingWorker<Void, Void>{
         this.lbl = lbl;
         this.btn = btn;
         this.c = c;
-    }
-    
-    public void config() {
-        hosts = (int) Math.pow(2, (32 - mask)) - 2;
-        
-        StringTokenizer st = new StringTokenizer(red, ".");
-        A = Integer.parseInt(st.nextToken());
-        B = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
-        D = Integer.parseInt(st.nextToken());
-        
-    }
-    
-    private StringBuffer sigIp() {
-        StringBuffer ip = new StringBuffer();
-        if(D < 255) {
-            D++;
-        } else if(C < 255) {
-            C++;
-            D = 0;
-        } else if(B < 255) {
-            B++;
-            C = 0;
-        }
-        ip.append(A); ip.append(".");
-        ip.append(B); ip.append(".");
-        ip.append(C); ip.append(".");
-        ip.append(D);
-        return ip;
     }
     
     @Override
@@ -93,10 +59,9 @@ public class Ping extends SwingWorker<Void, Void>{
         try {
             c.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             int i = 1;
-            config();
             
-            while(i <= hosts && !isCancelled()) {
-                ip = sigIp().toString();
+            while(i <= netinfo.getCantidadHosts() && !isCancelled()) {
+                ip = netinfo.sigIp().toString();
                 status = "probando ".concat(ip);
                 ping = InetAddress.getByName(ip);
                 if(ping.isReachable(tiempo)) {
@@ -157,14 +122,6 @@ public class Ping extends SwingWorker<Void, Void>{
         this.c = c;
     }
 
-    public int getMask() {
-        return mask;
-    }
-
-    public void setMask(int mask) {
-        this.mask = mask;
-    }
-    
     public int getTiempo() {
         return tiempo;
     }
@@ -173,20 +130,20 @@ public class Ping extends SwingWorker<Void, Void>{
         this.tiempo = tiempo;
     }
 
-    public String getRed() {
-        return red;
-    }
-
-    public void setRed(String red) {
-        this.red = red;
-    }
-
     public JButton getBtn() {
         return btn;
     }
 
     public void setBtn(JButton btn) {
         this.btn = btn;
+    }
+
+    public NetworkInfo getNetinfo() {
+        return netinfo;
+    }
+
+    public void setNetinfo(NetworkInfo netinfo) {
+        this.netinfo = netinfo;
     }
     
 }

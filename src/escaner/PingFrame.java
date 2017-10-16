@@ -16,6 +16,7 @@
  */
 package escaner;
 
+import escaner.tools.NetworkInfo;
 import escaner.tools.Ping;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -28,6 +29,7 @@ import javax.swing.JOptionPane;
  */
 public class PingFrame extends javax.swing.JFrame {
     private Ping pw;
+    private NetworkInfo netinfo;
     private boolean Ejecutando = false;
     
     /**
@@ -35,10 +37,11 @@ public class PingFrame extends javax.swing.JFrame {
      * @param red
      * @param mask
      */
-    public PingFrame(String red, String mask) {
+    public PingFrame(NetworkInfo netinfo) {
         initComponents();
-        txtDirRed.setText(red);
-        txtMaskRed.setText(mask);
+        this.netinfo = netinfo;
+        txtDirRed.setText(netinfo.getNetwork());
+        txtMaskRed.setText("" + netinfo.getMask());
         
         setLocationRelativeTo(null);
         
@@ -228,8 +231,9 @@ public class PingFrame extends javax.swing.JFrame {
             
         switchControles();
         pw = new Ping(this, jProgressBar1, txtDirecciones, lblConteoHosts, jButton1, getContentPane());
-        pw.setRed(txtDirRed.getText());
-        pw.setMask(Integer.parseInt(txtMaskRed.getText()));
+//        pw.setRed(txtDirRed.getText());
+//        pw.setMask(Integer.parseInt(txtMaskRed.getText()));
+        pw.setNetinfo(netinfo);
         pw.setTiempo(Integer.parseInt(txtLatencia.getText()));
         pw.execute();
     }

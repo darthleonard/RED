@@ -81,7 +81,6 @@ public class Escaner extends javax.swing.JFrame {
     public void cargaInterfaces() throws SocketException {
         interfaces = new ArrayList<>();
         Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-        NetworkInfo ni;
         Adaptador adaptador;
         
     	while (en.hasMoreElements()) {
@@ -199,10 +198,20 @@ public class Escaner extends javax.swing.JFrame {
     }
     
     private void revisarRed() {
-        PingFrame p = new PingFrame(lblIpRed.getText(), lblMascaraRed.getText());
-        p.setVisible(true);
+        Adaptador adaptador = interfaces.get(cmbInterfaces.getSelectedIndex());
+        if(adaptador.isSupported()) {
+            NetworkInfo netinfo = new NetworkInfo(adaptador.getIp(), adaptador.getMask());
+            PingFrame p = new PingFrame(netinfo);
+            p.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "El adaptador seleccionado no cuenta con una IPv4 valida",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
-    
     
     private void configuracion() {
         JOptionPane.showMessageDialog(null, "No implementado aun :/", "Lo siento :(", JOptionPane.WARNING_MESSAGE);
@@ -222,13 +231,6 @@ public class Escaner extends javax.swing.JFrame {
             Border b = BorderFactory.createRaisedBevelBorder();
             btn.setBorder(b);
         }
-    }
-
-    @Override
-    public Image getIconImage() {
-        Image retValue = Toolkit.getDefaultToolkit().
-        getImage(ClassLoader.getSystemResource("images/icono.png"));
-        return retValue;
     }
     
     public Image getEscanerIcon() {
