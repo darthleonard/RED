@@ -112,7 +112,13 @@ public class Escaner extends javax.swing.JFrame {
     }
     
     private void cargarTabla(ArrayList<String[]> datos) {
-        DefaultTableModel modelo = new DefaultTableModel(null, cabecera);
+        DefaultTableModel modelo = new DefaultTableModel(null, cabecera) {
+            @Override
+            public boolean isCellEditable(int i, int i1) {
+                return getColumnName(i1).equals(cabecera[3]);
+            }
+        };
+        
         String ip;
         String mac;
         String com;
@@ -288,6 +294,7 @@ public class Escaner extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblHosts.setSelectionForeground(new java.awt.Color(102, 255, 102));
         jScrollPane1.setViewportView(tblHosts);
         if (tblHosts.getColumnModel().getColumnCount() > 0) {
             tblHosts.getColumnModel().getColumn(0).setResizable(false);
@@ -629,12 +636,13 @@ public class Escaner extends javax.swing.JFrame {
             Border border = BorderFactory.createLineBorder(new Color(78, 154, 6));
             javax.swing.UIManager.put("ToolTip.border", border);
             javax.swing.ToolTipManager.sharedInstance().setDismissDelay(10000);
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            /*for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-            }
+            }*/
+            javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
         } catch (ClassNotFoundException | 
                  InstantiationException | 
                  IllegalAccessException | 

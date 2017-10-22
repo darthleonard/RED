@@ -1,8 +1,14 @@
 package escaner.tools;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -88,14 +94,30 @@ public class Tool {
     public void LimpiaArp() throws IOException {
         String comando = null;
         String so = System.getProperty("os.name");
+        Process p;
+        
+        File f = new File("test.bat");
+        PrintWriter pw = new PrintWriter(f);
+        pw.println("runas /user:altermannrt@hotmail.com \"netsh interface ip delete arpcache\"");
+        //pw.println("exit");
+        pw.close();
         
         if(so.equals("Linux")) {
             comando = new String("ip -s -s neigh flush all");
         } else {
-            comando = new String("cmd /c netsh interface ip delete arpcache");
+            //comando = new String("cmd /c runas /user:altermannrt@hotmail.com \"netsh interface ip delete arpcache\"");
+            comando = new String("cmd /c start test.bat");
         }
         
-        Runtime.getRuntime().exec(comando);
+        //String[] c = {"runas", "/user:altermannrt@hotmail.com", "\"netsh interface ip delete arpcache\""};
+        
+        p = Runtime.getRuntime().exec(comando);
+        
+        BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        System.out.println("_" + br.readLine());
+        System.out.println("_" + br.readLine());
+        
+        
     }
     
     public void Arp() {

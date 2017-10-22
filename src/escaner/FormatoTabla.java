@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class FormatoTabla  extends DefaultTableCellRenderer {
+public class FormatoTabla extends DefaultTableCellRenderer {
     private Escaner escaner;
     
     public FormatoTabla(Escaner escaner) {
@@ -31,21 +31,27 @@ public class FormatoTabla  extends DefaultTableCellRenderer {
     
     @Override
     public Component getTableCellRendererComponent ( JTable table, Object value, boolean selected, boolean focused, int row, int column ) {
-        setBackground(Color.white);//color de fondo
+        //setBackground(Color.white);//color de fondo
+        setBackground(new Color(20,20,20));//color de fondo
+        
         table.setForeground(Color.black);//color de texto
         switch(Integer.parseInt(table.getValueAt(row,4).toString())) {
-            case Escaner.EXISTE: setForeground(Color.black); break;
-            case Escaner.EXISTE2: setForeground(Color.gray); break;
+            //case Escaner.EXISTE: setForeground(Color.white); break;
+            case Escaner.EXISTE: setForeground(new Color(229,226,221)); break;
+            //case Escaner.EXISTE2: setForeground(Color.darkGray); break;
+            case Escaner.EXISTE2: setForeground(new Color(102,100,96)); break;
             case Escaner.CAMBIO:
                 setForeground(Color.blue);
+                //setForeground(new Color(173, 213, 247));
                 JLabel c = (JLabel) super.getTableCellRendererComponent(table, value, selected, focused, row, column);
                 c.setToolTipText(escaner.BuscaAnterior(value.toString()));
                 break;
+            //case Escaner.NUEVO: setForeground(new Color(104, 3, 0)); break;
             case Escaner.NUEVO: setForeground(Color.red); break;
             case Escaner.NOIDENTIFICADO: setForeground(Color.orange); break;
         }
 
         super.getTableCellRendererComponent(table, value, selected, focused, row, column);
         return this;
-    }        
+    }
 }
