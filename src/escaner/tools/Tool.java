@@ -44,7 +44,7 @@ public class Tool {
     private boolean validaIp(String ip) {
         String ipb = "", aux;
         try {
-            st = new StringTokenizer(ip, ".");
+            st = new StringTokenizer(ip.trim(), ".");
             while(st.hasMoreTokens()) {
                 aux = Integer.toBinaryString(Integer.parseInt(st.nextToken()));
                 while(aux.length() < 8)
@@ -183,12 +183,16 @@ public class Tool {
                 br.read(ip);
                 br.skip(7);
                 br.read(mac);
+                
+                //br.readLine();
+                
                 a = new String(ip);
+                if(!validaIp(a))
+                    continue;
                 b = new String(mac);
                 //if(!b.contains("("))
                 if(!a.toUpperCase().contains("INT"))
                     datos.add(new String[]{a, b.toUpperCase(), ""});
-                br.readLine();
             }
         } else
             System.out.println("No se encontraron resultados");
@@ -213,5 +217,4 @@ public class Tool {
     public void setMask(int mask) {
         this.mask = mask;
     }
-    
 }

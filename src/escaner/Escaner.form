@@ -97,9 +97,6 @@
     <Property name="title" type="java.lang.String" value="Registro de Equipos en Red"/>
     <Property name="name" type="java.lang.String" value="frameMain" noResource="true"/>
   </Properties>
-  <AccessibilityProperties>
-    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Registro de Equipos en Red"/>
-  </AccessibilityProperties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>

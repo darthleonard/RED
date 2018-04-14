@@ -19,12 +19,12 @@ package escaner;
 import escaner.tools.Adaptador;
 import escaner.tools.Tool;
 import escaner.tools.Archivos;
+import escaner.tools.Mensajes;
 import escaner.tools.NetworkInfo;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -51,11 +51,11 @@ public class Escaner extends javax.swing.JFrame {
     public static final int NUEVO = 3;
     public static final int NOIDENTIFICADO = 4;
     
-    ArrayList<Adaptador> interfaces;
-    
+    private ArrayList<Adaptador> interfaces;
+    private boolean isAdapterSupported;
     private final String cabecera[] = new String[]{"", "IP", "MAC", "Descripcion",""};
-    ArrayList<String[]> registros;
-    TableModel tabla;
+    private ArrayList<String[]> registros;
+    private TableModel tabla;
 
     /**
      * Creates new form Escaner
@@ -107,9 +107,13 @@ public class Escaner extends javax.swing.JFrame {
     }
     
     private void cargarTablaArp() {
-        Tool tool = new Tool(lblIpRed.getText(), Integer.parseInt(lblMascaraRed.getText()));
-        ArrayList<String[]> datos = tool.getDatos();
-        cargarTabla(datos);
+        if(isAdapterSupported) {
+            Tool tool = new Tool(lblIpRed.getText(), Integer.parseInt(lblMascaraRed.getText()));
+            ArrayList<String[]> datos = tool.getDatos();
+            cargarTabla(datos);
+        } else {
+            Mensajes.MensajeError("Error", "El adaptador seleccionado no es soportado");
+        }
     }
     
     private void cargarTabla(ArrayList<String[]> datos) {
@@ -613,9 +617,11 @@ public class Escaner extends javax.swing.JFrame {
             NetworkInfo netinfo = new NetworkInfo(adaptador.getIp(), adaptador.getMask());
             ipRed = netinfo.getNetwork();
             mask = "" + netinfo.getMask();
+            isAdapterSupported = true;
         } else {
             ipRed = adaptador.getIp();
             mask = "" + adaptador.getMask();
+            isAdapterSupported = false;
         }
         
         lblIpRed.setText(ipRed);
