@@ -184,13 +184,13 @@ public class Tool {
                 br.skip(7);
                 br.read(mac);
                 
-                //br.readLine();
+                br.readLine();
                 
                 a = new String(ip);
-                if(!validaIp(a))
-                    continue;
+                
+                if(!validaIp(a)) continue;
+                
                 b = new String(mac);
-                //if(!b.contains("("))
                 if(!a.toUpperCase().contains("INT"))
                     datos.add(new String[]{a, b.toUpperCase(), ""});
             }
