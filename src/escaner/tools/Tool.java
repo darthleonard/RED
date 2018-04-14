@@ -1,33 +1,31 @@
 package escaner.tools;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
+import javax.swing.JOptionPane;
 
 public class Tool {
     private int mask = 24;
-    private String red = "192.168.1.0";
+    private String red;
     private String redb;
     private final ArrayList<String[]> datos;
     
     private StringTokenizer st;
     
-    public Tool() {
+    public Tool(String red, int mask) {
+        this.red = red;
+        this.mask = mask;
         datos = new ArrayList();
         convierteRed();
-        
         Arp();
     }
     
@@ -45,7 +43,6 @@ public class Tool {
     
     private boolean validaIp(String ip) {
         String ipb = "", aux;
-        
         try {
             st = new StringTokenizer(ip, ".");
             while(st.hasMoreTokens()) {
@@ -77,14 +74,24 @@ public class Tool {
             }
         }
         
+        if(flag) {
+            JOptionPane.showMessageDialog(null, "No se encontro direccion IPv4", inet.getHostName(), JOptionPane.ERROR_MESSAGE);
+            System.exit(-1);
+        }
+            
         return new String[] { inet.getHostAddress(), obtenerMacLocal(inet), "Equipo local" };
     }
     
     private String obtenerMacLocal(InetAddress inet) throws SocketException {
         NetworkInterface network = NetworkInterface.getByInetAddress(inet);
         byte[] mac = network.getHardwareAddress();
-        
         StringBuilder sb = new StringBuilder();
+        
+        if(mac == null) {
+            JOptionPane.showMessageDialog(null, "mac es null", network.getDisplayName().toString(), JOptionPane.ERROR_MESSAGE);
+            System.exit(-1);
+        }
+        
         for (int i = 0; i < mac.length; i++)
             sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? ":" : ""));
         

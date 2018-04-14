@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -106,7 +107,7 @@ public class Escaner extends javax.swing.JFrame {
     }
     
     private void cargarTablaArp() {
-        Tool tool = new Tool();
+        Tool tool = new Tool(lblIpRed.getText(), Integer.parseInt(lblMascaraRed.getText()));
         ArrayList<String[]> datos = tool.getDatos();
         cargarTabla(datos);
     }
@@ -392,7 +393,6 @@ public class Escaner extends javax.swing.JFrame {
                 .addComponent(btnEliminarRegistros)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbInterfaces, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -400,8 +400,9 @@ public class Escaner extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblMascaraRed)
-                        .addContainerGap())))
+                        .addComponent(lblMascaraRed))
+                    .addComponent(cmbInterfaces, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,7 +413,7 @@ public class Escaner extends javax.swing.JFrame {
                     .addComponent(btnEliminarRegistros)
                     .addComponent(btnPing)
                     .addComponent(btnConfig))
-                .addGap(0, 5, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(cmbInterfaces, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -496,7 +497,7 @@ public class Escaner extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -592,26 +593,27 @@ public class Escaner extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
     
     private void limpiarTablaArp() {
-        Tool t = new Tool();
+        /*Tool t = new Tool();
         try {
             t.LimpiaArp();
             JOptionPane.showMessageDialog(this, "La cache ARP del equipo ha sido limpiada");
         } catch (IOException ex) {
             Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        JOptionPane.showMessageDialog(null, "No implementado aun :/", "Lo siento :(", JOptionPane.WARNING_MESSAGE);
     }
     
     private void actualizaDatosRed() {
-        Adaptador a = interfaces.get(cmbInterfaces.getSelectedIndex());
+        Adaptador adaptador = interfaces.get(cmbInterfaces.getSelectedIndex());
         String ipRed;
         String mask;
-        if(a.isSupported()) {
-            NetworkInfo netinfo = new NetworkInfo(a.getIp(), a.getMask());
+        if(adaptador.isSupported()) {
+            NetworkInfo netinfo = new NetworkInfo(adaptador.getIp(), adaptador.getMask());
             ipRed = netinfo.getNetwork();
             mask = "" + netinfo.getMask();
         } else {
-            ipRed = a.getIp();
-            mask = "" + a.getMask();
+            ipRed = adaptador.getIp();
+            mask = "" + adaptador.getMask();
         }
         
         lblIpRed.setText(ipRed);
@@ -631,28 +633,33 @@ public class Escaner extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        javax.swing.UIManager.put("ToolTip.background", new javax.swing.plaf.ColorUIResource(163, 245, 82));
+        Border border = BorderFactory.createLineBorder(new Color(78, 154, 6));
+        javax.swing.UIManager.put("ToolTip.border", border);
+        javax.swing.ToolTipManager.sharedInstance().setDismissDelay(10000);
+        
         try {
-            javax.swing.UIManager.put("ToolTip.background", new javax.swing.plaf.ColorUIResource(163, 245, 82));
-            Border border = BorderFactory.createLineBorder(new Color(78, 154, 6));
-            javax.swing.UIManager.put("ToolTip.border", border);
-            javax.swing.ToolTipManager.sharedInstance().setDismissDelay(10000);
-            /*for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }*/
             javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-        } catch (ClassNotFoundException | 
-                 InstantiationException | 
-                 IllegalAccessException | 
-                 javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Escaner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            JOptionPane.showMessageDialog(null, "Cargar LIB", "Error en LookAndFeel", JOptionPane.ERROR_MESSAGE);
         }
         
         java.awt.EventQueue.invokeLater(() -> {
             new Escaner().setVisible(true);
         });
+    }
+    
+    private void defaultLAF() {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
