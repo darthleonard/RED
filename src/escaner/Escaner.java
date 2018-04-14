@@ -276,7 +276,7 @@ public class Escaner extends javax.swing.JFrame {
         itmAcerca = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Registro de equipos en red");
+        setTitle("Registro de Equipos en Red");
         setName("frameMain"); // NOI18N
 
         tblHosts.setModel(new javax.swing.table.DefaultTableModel(
@@ -510,6 +510,8 @@ public class Escaner extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
         );
+
+        getAccessibleContext().setAccessibleName("Registro de Equipos en Red");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
