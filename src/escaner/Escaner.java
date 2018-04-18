@@ -647,6 +647,9 @@ public class Escaner extends javax.swing.JFrame {
         javax.swing.ToolTipManager.sharedInstance().setDismissDelay(10000);
         
         try {
+            java.util.Properties props = new java.util.Properties();
+            props.put("logoString", "darthleonard");
+            com.jtattoo.plaf.hifi.HiFiLookAndFeel.setCurrentTheme(props);
             javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             JOptionPane.showMessageDialog(null, "Cargar LIB", "Error en LookAndFeel", JOptionPane.ERROR_MESSAGE);
