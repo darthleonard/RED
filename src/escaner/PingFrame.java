@@ -16,12 +16,12 @@
  */
 package escaner;
 
+import escaner.tools.Mensajes;
 import escaner.tools.NetworkInfo;
 import escaner.tools.Ping;
 import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -180,29 +180,29 @@ public class PingFrame extends javax.swing.JFrame {
     
     private boolean validaDatos(String ip, String mask, String lat) {
         if(!validaDireccion(ip)) {
-            JOptionPane.showMessageDialog(null, "Direccion de red invalida");
+            Mensajes.MensajeError("ERROR de IP", "Direccion de red invalida");
             return false;
         }
         
         try {
             int m = Integer.parseInt(mask);
             if(m < 1 || m > 30) {
-                JOptionPane.showMessageDialog(null, "Mascara no valida, solo se adminten valores entre 1 y 32");
+                Mensajes.MensajeError("Mascara no valida\nMascara no valida, solo se adminten valores entre 1 y 32");
                 return false;
             }
         } catch(NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "La mascara debe ser expresada en numero decimal entero");
+            Mensajes.MensajeError("Mascara no valida\nLa Mascara debe ser expresada en numero decimal entero");
             return false;
         }
         
         try {
             int l = Integer.parseInt(lat);
             if(l < 10 || l > 5000) {
-                JOptionPane.showMessageDialog(null, "El tiempo de espera debe ser entre 10 y 5000");
+                Mensajes.MensajeError("El tiempo de espera debe ser entre 10 y 5000");
                 return false;
             }
         }catch(NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor de latencia invalido");
+            Mensajes.MensajeError("Valor de latencia invalido");
             return false;
         }
         
@@ -231,8 +231,6 @@ public class PingFrame extends javax.swing.JFrame {
             
         switchControles();
         pw = new Ping(this, jProgressBar1, txtDirecciones, lblConteoHosts, jButton1, getContentPane());
-//        pw.setRed(txtDirRed.getText());
-//        pw.setMask(Integer.parseInt(txtMaskRed.getText()));
         pw.setNetinfo(netinfo);
         pw.setTiempo(Integer.parseInt(txtLatencia.getText()));
         pw.execute();

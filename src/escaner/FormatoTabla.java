@@ -30,10 +30,9 @@ public class FormatoTabla extends DefaultTableCellRenderer {
     }
     
     @Override
-    public Component getTableCellRendererComponent ( JTable table, Object value, boolean selected, boolean focused, int row, int column ) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
         //setBackground(Color.white);//color de fondo
         setBackground(new Color(20,20,20));//color de fondo
-        
         table.setForeground(Color.black);//color de texto
         switch(Integer.parseInt(table.getValueAt(row,4).toString())) {
             //case Escaner.EXISTE: setForeground(Color.white); break;
@@ -42,9 +41,12 @@ public class FormatoTabla extends DefaultTableCellRenderer {
             case Escaner.EXISTE2: setForeground(new Color(102,100,96)); break;
             case Escaner.CAMBIO:
                 setForeground(Color.blue);
+                if(column == 3) {
+                    setToolTipText(escaner.BuscaAnterior(value.toString()));
+                }
                 //setForeground(new Color(173, 213, 247));
-                JLabel c = (JLabel) super.getTableCellRendererComponent(table, value, selected, focused, row, column);
-                c.setToolTipText(escaner.BuscaAnterior(value.toString()));
+                //JLabel c = (JLabel) super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+                //c.setToolTipText(escaner.BuscaAnterior(value.toString()));
                 break;
             //case Escaner.NUEVO: setForeground(new Color(104, 3, 0)); break;
             case Escaner.NUEVO: setForeground(Color.red); break;

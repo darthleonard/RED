@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/leoren/NetBeansProjects/IPLogger/src/escaner/tools/Tool.java</file>
-            <file>file:/home/leoren/NetBeansProjects/IPLogger/src/escaner/Escaner.java</file>
-            <file>file:/home/leoren/NetBeansProjects/IPLogger/src/escaner/tools/NetworkInfo.java</file>
-            <file>file:/home/leoren/NetBeansProjects/IPLogger/src/escaner/PingFrame.java</file>
+            <file>file:/home/leoren/NetBeansProjects/RED/src/escaner/Escaner.java</file>
+            <file>file:/home/leoren/NetBeansProjects/RED/src/escaner/PingFrame.java</file>
+            <file>file:/home/leoren/NetBeansProjects/RED/src/escaner/tools/Mensajes.java</file>
         </group>
     </open-files>
 </project-private>

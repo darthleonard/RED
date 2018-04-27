@@ -66,20 +66,15 @@ public class Escaner extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         try {
             cargaInterfaces();
-        } catch (SocketException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "ERROR",
-                    "No se pudieron cargar todas las interfaces",
-                    JOptionPane.ERROR_MESSAGE
-            );
+        } catch (Exception ex) {
+            Mensajes.MensajeError("No se pudieron cargar todas las interfaces", ex.getMessage());
         }
         
         tabla = tblHosts.getModel();
         cargarTablaInicial();
     }
     
-    public void cargaInterfaces() throws SocketException {
+    public void cargaInterfaces() throws SocketException, Exception {
         interfaces = new ArrayList<>();
         Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
         Adaptador adaptador;
@@ -193,7 +188,7 @@ public class Escaner extends javax.swing.JFrame {
                 
                 a.Guardar(datos);
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
+                Mensajes.MensajeError("ERROR", "No se localizo el archivo de datos");
             }
         }
     }
@@ -212,17 +207,12 @@ public class Escaner extends javax.swing.JFrame {
             PingFrame p = new PingFrame(netinfo);
             p.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El adaptador seleccionado no cuenta con una IPv4 valida",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
+            Mensajes.MensajeError("ERROR", "El adaptador seleccionado no cuenta con una IPv4 valida");
         }
-        
     }
     
     private void configuracion() {
-        JOptionPane.showMessageDialog(null, "No implementado aun :/", "Lo siento :(", JOptionPane.WARNING_MESSAGE);
+        Mensajes.MensajeAlerta("Lo siento :(", "No implementado aun :/");
     }
     
     /**
@@ -533,12 +523,7 @@ public class Escaner extends javax.swing.JFrame {
     }//GEN-LAST:event_itmPingActionPerformed
 
     private void itmAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAcercaActionPerformed
-        Object parent = null;
-        String titulo = "Acerca de este software";
-        String mensaje = "leolinuxmx@gmail.com";
-        int tipo = JOptionPane.INFORMATION_MESSAGE;
-        
-        JOptionPane.showMessageDialog(null, mensaje, titulo, tipo);
+        Mensajes.MensajeInformacion("Acerca de este software", "leolinuxmx@gmail.com");
     }//GEN-LAST:event_itmAcercaActionPerformed
 
     private void btnGuardarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMousePressed
@@ -591,7 +576,11 @@ public class Escaner extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarRegistrosMouseReleased
 
     private void cmbInterfacesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbInterfacesItemStateChanged
-        actualizaDatosRed();
+        try {
+            actualizaDatosRed();
+        } catch (Exception ex) {
+            Mensajes.MensajeError("ERROR", ex.getMessage());
+        }
     }//GEN-LAST:event_cmbInterfacesItemStateChanged
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -606,10 +595,13 @@ public class Escaner extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-        JOptionPane.showMessageDialog(null, "No implementado aun :/", "Lo siento :(", JOptionPane.WARNING_MESSAGE);
+        Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
     }
     
-    private void actualizaDatosRed() {
+    private void actualizaDatosRed() throws Exception {
+        if(cmbInterfaces.getItemCount() < 1) {
+            throw new Exception("No se han detectado interfaces activas o soportadas");
+        }
         Adaptador adaptador = interfaces.get(cmbInterfaces.getSelectedIndex());
         String ipRed;
         String mask;
@@ -652,7 +644,8 @@ public class Escaner extends javax.swing.JFrame {
             com.jtattoo.plaf.hifi.HiFiLookAndFeel.setCurrentTheme(props);
             javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            JOptionPane.showMessageDialog(null, "Cargar LIB", "Error en LookAndFeel", JOptionPane.ERROR_MESSAGE);
+            Mensajes.MensajeError("Error en LookAndFeel", "No se encontro la libreria de L&F en el equipo");
+            defaultLAF();
         }
         
         java.awt.EventQueue.invokeLater(() -> {
@@ -660,7 +653,7 @@ public class Escaner extends javax.swing.JFrame {
         });
     }
     
-    private void defaultLAF() {
+    private static void defaultLAF() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {

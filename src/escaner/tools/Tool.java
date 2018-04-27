@@ -11,7 +11,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
-import javax.swing.JOptionPane;
 
 public class Tool {
     private int mask = 24;
@@ -75,7 +74,7 @@ public class Tool {
         }
         
         if(flag) {
-            JOptionPane.showMessageDialog(null, "No se encontro direccion IPv4", inet.getHostName(), JOptionPane.ERROR_MESSAGE);
+            Mensajes.MensajeError(inet.getHostName(), "No se encontro direccion IPv4\n\nTool ln78");
             System.exit(-1);
         }
             
@@ -88,7 +87,7 @@ public class Tool {
         StringBuilder sb = new StringBuilder();
         
         if(mac == null) {
-            JOptionPane.showMessageDialog(null, "mac es null", network.getDisplayName().toString(), JOptionPane.ERROR_MESSAGE);
+            Mensajes.MensajeError(network.getDisplayName().toString(), "mac es null\n\nTool ln91");
             System.exit(-1);
         }
         
