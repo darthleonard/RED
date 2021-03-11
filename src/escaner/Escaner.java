@@ -16,6 +16,7 @@
  */
 package escaner;
 
+import escaner.services.NetworkInterfacesService;
 import escaner.tools.Adaptador;
 import escaner.tools.Tool;
 import escaner.tools.Archivos;
@@ -33,6 +34,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -74,19 +78,8 @@ public class Escaner extends javax.swing.JFrame {
     }
     
     public void cargaInterfaces() throws SocketException, Exception {
-        interfaces = new ArrayList<>();
-        Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-        Adaptador adaptador;
-        
-    	while (en.hasMoreElements()) {
-            NetworkInterface networkAdapter = en.nextElement();
-            if(networkAdapter.isUp() && !networkAdapter.isLoopback()) {
-                adaptador = new Adaptador(networkAdapter);
-                interfaces.add(adaptador);
-                cmbInterfaces.addItem(adaptador.getId() + " : " + adaptador.getNombre());
-            }
-    	}
-        
+    	interfaces = new NetworkInterfacesService().GetInterfaces();
+    	cmbInterfaces.setModel(new DefaultComboBoxModel(interfaces.toArray()));
         actualizaDatosRed();
     }
     
@@ -678,7 +671,7 @@ public class Escaner extends javax.swing.JFrame {
     private javax.swing.JLabel btnEliminarRegistros;
     private javax.swing.JLabel btnGuardar;
     private javax.swing.JLabel btnPing;
-    private javax.swing.JComboBox<String> cmbInterfaces;
+    private javax.swing.JComboBox<Adaptador> cmbInterfaces;
     private javax.swing.JMenuItem itmAcerca;
     private javax.swing.JMenuItem itmAyuda;
     private javax.swing.JMenuItem itmGuardar;

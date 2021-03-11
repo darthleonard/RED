@@ -121,4 +121,9 @@ public class Adaptador {
     public boolean isSupported() {
         return supported;
     }
+    
+    @Override
+    public String toString() {
+    	return this.getId() + " : " + this.getNombre();
+    }
 }
