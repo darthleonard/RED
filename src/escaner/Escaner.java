@@ -16,33 +16,30 @@
  */
 package escaner;
 
-import escaner.services.NetworkInterfacesService;
-import escaner.tools.Adaptador;
-import escaner.tools.Tool;
-import escaner.tools.Archivos;
-import escaner.tools.Mensajes;
-import escaner.tools.NetworkInfo;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
-import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
+import escaner.services.NetworkInterfacesService;
+import escaner.tools.Adaptador;
+import escaner.tools.Archivos;
+import escaner.tools.Mensajes;
+import escaner.tools.NetworkInfo;
+import escaner.tools.Tool;
 
 /**
  *
@@ -77,7 +74,8 @@ public class Escaner extends javax.swing.JFrame {
         cargarTablaInicial();
     }
     
-    public void cargaInterfaces() throws SocketException, Exception {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void cargaInterfaces() throws SocketException, Exception {
     	interfaces = new NetworkInterfacesService().GetInterfaces();
     	cmbInterfaces.setModel(new DefaultComboBoxModel(interfaces.toArray()));
         actualizaDatosRed();
