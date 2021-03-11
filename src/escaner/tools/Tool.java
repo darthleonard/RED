@@ -197,7 +197,7 @@ public class Tool {
             System.out.println("No se encontraron resultados");
     }
     
-    public ArrayList getDatos() {
+    public ArrayList<String[]> getDatos() {
         return datos;
     }
 
