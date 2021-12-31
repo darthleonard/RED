@@ -26,34 +26,30 @@ import java.util.Scanner;
 public class Archivos {
     String nombre = "directorio.sc";
     
-    public Archivos() throws FileNotFoundException {
-        //Scanner sc=new Scanner(new FileReader("data.in"));
-    }
-    
     public ArrayList<String[]> Leer() throws FileNotFoundException {
-        ArrayList<String[]> list = new ArrayList();
-        if(ExisteRegistro()) {
+        ArrayList<String[]> list = new ArrayList<String[]>();
+        if(ExisteArchivo()) {
             Scanner sc = new Scanner(new FileReader(nombre));
-            while (sc.hasNext())
+            while (sc.hasNext()) {
                 list.add(new String[]{sc.nextLine(), sc.nextLine(), sc.nextLine()});
+            }
+            sc.close();
         }
         return list;
     }
     
     public void Guardar(ArrayList<String[]> datos) throws FileNotFoundException {
-        PrintWriter pw;
-        pw = new PrintWriter(nombre);
+        PrintWriter pw = new PrintWriter(nombre);
         for (int i = 0; i < datos.size(); i++) {
             pw.println(datos.get(i)[0]);
             pw.println(datos.get(i)[1]);
             pw.println(datos.get(i)[2]);
         }
-        
         pw.close();
     }
     
-    public boolean ExisteRegistro() {
-        File f = new File(nombre);
-        return f.exists();
+    public boolean ExisteArchivo() {
+        File file = new File(nombre);
+        return file.exists();
     }
 }
