@@ -18,12 +18,13 @@ package escaner;
 
 import java.awt.Color;
 import java.awt.Component;
-import javax.swing.JLabel;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class FormatoTabla extends DefaultTableCellRenderer {
-    private Escaner escaner;
+	private static final long serialVersionUID = 1L;
+	private Escaner escaner;
     
     public FormatoTabla(Escaner escaner) {
         this.escaner = escaner;
