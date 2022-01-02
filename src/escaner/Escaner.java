@@ -33,6 +33,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import escaner.services.NetworkInterfacesService;
 import escaner.tools.Adaptador;
@@ -158,6 +159,8 @@ public class Escaner extends javax.swing.JFrame {
         tblHosts.getColumnModel().getColumn(0).setMaxWidth(40);
         tblHosts.getColumnModel().getColumn(4).setMinWidth(0);
         tblHosts.getColumnModel().getColumn(4).setMaxWidth(0);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblHosts.getModel());
+        tblHosts.setRowSorter(sorter);
     }
     
     private void guardarTabla() {
