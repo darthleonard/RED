@@ -33,6 +33,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import escaner.services.NetworkInterfacesService;
 import escaner.tools.Adaptador;
@@ -158,6 +159,8 @@ public class Escaner extends javax.swing.JFrame {
         tblHosts.getColumnModel().getColumn(0).setMaxWidth(40);
         tblHosts.getColumnModel().getColumn(4).setMinWidth(0);
         tblHosts.getColumnModel().getColumn(4).setMaxWidth(0);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblHosts.getModel());
+        tblHosts.setRowSorter(sorter);
     }
     
     private void guardarTabla() {
@@ -259,6 +262,10 @@ public class Escaner extends javax.swing.JFrame {
         itmPing = new javax.swing.JMenuItem();
         jmAyuda = new javax.swing.JMenu();
         itmAyuda = new javax.swing.JMenuItem();
+        itmAyudaColores = new javax.swing.JMenuItem();
+        itmAyudaGuardar = new javax.swing.JMenuItem();
+        itmAyudaCargarTablaARP = new javax.swing.JMenuItem();
+        itmAyudaPing = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         itmAcerca = new javax.swing.JMenuItem();
 
@@ -274,9 +281,6 @@ public class Escaner extends javax.swing.JFrame {
                 "", "IP", "MAC", "NOTAS"
             }
         ) {
-            /**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 			boolean[] canEdit = new boolean [] {
                 false, false, false, true
@@ -470,6 +474,38 @@ public class Escaner extends javax.swing.JFrame {
             }
         });
         jmAyuda.add(itmAyuda);
+        
+        itmAyudaGuardar.setText("Que guarda");
+        itmAyudaGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmAyudaGuardarActionPerformed(evt);
+            }
+        });
+        jmAyuda.add(itmAyudaGuardar);
+        
+        itmAyudaCargarTablaARP.setText("Tabla ARP");
+        itmAyudaCargarTablaARP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmAyudaCargarTablaARPActionPerformed(evt);
+            }
+        });
+        jmAyuda.add(itmAyudaCargarTablaARP);
+        
+        itmAyudaPing.setText("Herramienta ping");
+        itmAyudaPing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmAyudaPingActionPerformed(evt);
+            }
+        });
+        jmAyuda.add(itmAyudaPing);
+        
+        itmAyudaColores.setText("Colores de la tabla");
+        itmAyudaColores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmAyudaColoresActionPerformed(evt);
+            }
+        });
+        jmAyuda.add(itmAyudaColores);
         jmAyuda.add(jSeparator1);
 
         itmAcerca.setText("Acerca de");
@@ -560,9 +596,25 @@ public class Escaner extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfigMouseReleased
 
     private void itmAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAyudaActionPerformed
-        
+        Ayuda.MuestraAyuda();
     }//GEN-LAST:event_itmAyudaActionPerformed
 
+    private void itmAyudaGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAyudaActionPerformed
+        Ayuda.MuestraGuardar();;
+    }
+    
+    private void itmAyudaCargarTablaARPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAyudaActionPerformed
+        Ayuda.MuestraCargarTablaARP();
+    }
+    
+    private void itmAyudaPingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAyudaActionPerformed
+        Ayuda.MuestraPing();
+    }
+    
+    private void itmAyudaColoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAyudaActionPerformed
+        Ayuda.MuestraSignificadoColores();
+    }
+    
     private void btnEliminarRegistrosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarRegistrosMousePressed
         animaBoton(btnEliminarRegistros, true);
     }//GEN-LAST:event_btnEliminarRegistrosMousePressed
@@ -672,6 +724,10 @@ public class Escaner extends javax.swing.JFrame {
     private javax.swing.JComboBox<Adaptador> cmbInterfaces;
     private javax.swing.JMenuItem itmAcerca;
     private javax.swing.JMenuItem itmAyuda;
+    private javax.swing.JMenuItem itmAyudaGuardar;
+    private javax.swing.JMenuItem itmAyudaCargarTablaARP;
+    private javax.swing.JMenuItem itmAyudaPing;
+    private javax.swing.JMenuItem itmAyudaColores;
     private javax.swing.JMenuItem itmGuardar;
     private javax.swing.JMenuItem itmPing;
     private javax.swing.JMenuItem itmTablaArp;
