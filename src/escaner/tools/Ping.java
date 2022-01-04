@@ -16,134 +16,89 @@
  */
 package escaner.tools;
 
-import escaner.PingFrame;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.io.IOException;
 import java.net.InetAddress;
-import javax.swing.JButton;
+
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
-public class Ping extends SwingWorker<Void, Void>{
-    private PingFrame pf;
-    private JProgressBar jpb;
-    private JTextArea txt;
-    private JLabel lbl;
-    private JButton btn;
-    private Container c;
-    
-    private NetworkInfo netinfo;
-    
-    private int tiempo = 100;
-    
-    public Ping(PingFrame pf, JProgressBar jpb, JTextArea txt, JLabel lbl, JButton btn, Container c) {
-        this.pf = pf;
-        this.jpb = jpb;
-        this.txt = txt;
-        this.lbl = lbl;
-        this.btn = btn;
-        this.c = c;
-    }
-    
-    @Override
-    protected Void doInBackground() throws Exception {
-        InetAddress ping;
-        String ip;
-        String status;
-        int cont = 0;
-        jpb.setMaximum(255);
-        txt.setText("");
-        try {
-            c.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            int i = 1;
-            
-            while(i <= netinfo.getCantidadHosts() && !isCancelled()) {
-                ip = netinfo.sigIp().toString();
-                status = "probando ".concat(ip);
-                ping = InetAddress.getByName(ip);
-                if(ping.isReachable(tiempo)) {
-                    cont++;
-                    status = status.concat("\t responde!");
-                } else
-                    status = status.concat("\t offline");
-                
-                jpb.setValue(i);
-                txt.append(status.concat("\n"));
-                txt.setCaretPosition(txt.getDocument().getLength());
-                lbl.setText(cont + " hosts activos de " + i);
-                i++;
-            }
-            
-            txt.append("El proceso ha finalizado.");
-            txt.setCaretPosition(txt.getDocument().getLength());
-        } catch (IOException ex) { System.out.println(ex); }
-        c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        
-        return null;
-    }
+import escaner.PingFrame;
 
-    @Override
-    protected void done() {
-        pf.switchControles();
-    }
-    
-    public JProgressBar getJpb() {
-        return jpb;
-    }
+public class Ping extends SwingWorker<Void, Void> {
+	private PingFrame pingFrame;
+	private JProgressBar progressBar;
+	private JTextArea textArea;
+	private JLabel label;
+	private Container container;
 
-    public void setJpb(JProgressBar jpb) {
-        this.jpb = jpb;
-    }
+	private NetworkInfo networkInfo;
 
-    public JTextArea getTxt() {
-        return txt;
-    }
+	private int tiempo = 100;
 
-    public void setTxt(JTextArea txt) {
-        this.txt = txt;
-    }
+	public Ping(PingArgs args) {
+		this.pingFrame = args.pingFrame;
+		this.progressBar = args.progressBar;
+		this.textArea = args.textArea;
+		this.label = args.label;
+		this.container = args.container;
+	}
 
-    public JLabel getLbl() {
-        return lbl;
-    }
+	@Override
+	protected Void doInBackground() throws Exception {
+		InetAddress ping;
+		String ip;
+		String status;
+		int hostsActivos = 0;
+		progressBar.setMaximum(255);
+		textArea.setText("");
+		try {
+			container.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			int i = 1;
 
-    public void setLbl(JLabel lbl) {
-        this.lbl = lbl;
-    }
+			while (i <= networkInfo.getCantidadHosts() && !isCancelled()) {
+				ip = networkInfo.siguienteIp().toString();
+				status = "probando ".concat(ip);
+				ping = InetAddress.getByName(ip);
+				if (ping.isReachable(tiempo)) {
+					hostsActivos++;
+					status = status.concat("\t responde!");
+				} else {
+					status = status.concat("\t offline");
+				}
 
-    public Container getC() {
-        return c;
-    }
+				progressBar.setValue(i);
+				textArea.append(status.concat("\n"));
+				textArea.setCaretPosition(textArea.getDocument().getLength());
+				label.setText(hostsActivos + " hosts activos de " + i);
+				i++;
+			}
 
-    public void setC(Container c) {
-        this.c = c;
-    }
+			textArea.append("El proceso ha finalizado.");
+			textArea.setCaretPosition(textArea.getDocument().getLength());
+		} catch (IOException ex) {
+			System.err.println(ex);
+			Mensajes.MensajeError(ex.getMessage());
+		}
+		container.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
-    public int getTiempo() {
-        return tiempo;
-    }
+		return null;
+	}
 
-    public void setTiempo(int tiempo) {
-        this.tiempo = tiempo;
-    }
+	@Override
+	protected void done() {
+		pingFrame.switchControles();
+	}
 
-    public JButton getBtn() {
-        return btn;
-    }
+	public void setTiempo(int tiempo) {
+		this.tiempo = tiempo;
+	}
 
-    public void setBtn(JButton btn) {
-        this.btn = btn;
-    }
+	public void setNetinfo(NetworkInfo netinfo) {
+		this.networkInfo = netinfo;
+	}
 
-    public NetworkInfo getNetinfo() {
-        return netinfo;
-    }
-
-    public void setNetinfo(NetworkInfo netinfo) {
-        this.netinfo = netinfo;
-    }
-    
 }
