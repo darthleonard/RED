@@ -38,7 +38,6 @@ public class FormatoTabla extends DefaultTableCellRenderer {
             case Escaner.EXISTE: setForeground(new Color(229,226,221)); break;
             case Escaner.EXISTE2: setForeground(new Color(102,100,96)); break;
             case Escaner.CAMBIO:
-                //setForeground(Color.blue);
             	setForeground(new Color(59, 131, 189));
                 if(column == 2) {
                 	String tooltip = escaner.BuscaAnterior(value.toString());
