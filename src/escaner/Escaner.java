@@ -114,30 +114,28 @@ public class Escaner extends javax.swing.JFrame {
         
         String ip;
         String mac;
-        String com;
+        String descripcion;
         int estado;
-        
-        @SuppressWarnings("unchecked")
-		ArrayList<String[]> aux = (ArrayList<String[]>) registros.clone();
+        ArrayList<String[]> registrosDelArchivo = new ArrayList<String[]>(registros);
         
         for(String get[] : datos) {
             estado = NUEVO;
             ip = get[0].trim();
             mac = get[1].trim();
-            com = get[2].trim();
+            descripcion = get[2].trim();
             
-            for(String reg[] : registros) {
-                if(reg[1].equals(mac)) { // la mac ya esta en la lista
-                    aux.remove(reg);
-                    if(ip.equals(reg[0])) { // la ip no a cambiado
-                        if(reg[2].length() != 0) { // el registro se encuentra correcto
-                            com = reg[2];
+            for(String registro[] : registros) {
+                if(registro[1].equals(mac)) { // la mac ya esta en la lista
+                    registrosDelArchivo.remove(registro);
+                    if(ip.equals(registro[0])) { // la ip no a cambiado
+                        if(registro[2].length() != 0) { // el registro se encuentra correcto
+                            descripcion = registro[2];
                             estado = EXISTE;
                         } else { // no se ha identificado
                             estado = NOIDENTIFICADO;
                         }
                     } else { // la ip es dferente
-                        com = reg[2];
+                        descripcion = registro[2];
                         estado = CAMBIO;
                     }
                     break;
@@ -145,10 +143,11 @@ public class Escaner extends javax.swing.JFrame {
                     estado = NUEVO;
                 }
             }
-            modelo.addRow(new Object[] {modelo.getRowCount()+1, ip, mac, com, estado});
+            modelo.addRow(new Object[] {modelo.getRowCount()+1, ip, mac, descripcion, estado});
         }
-        for(String a[] : aux)
-            modelo.addRow(new Object[] {modelo.getRowCount()+1, a[0], a[1], a[2], EXISTE2});
+        for(String registro[] : registrosDelArchivo) {
+            modelo.addRow(new Object[] {modelo.getRowCount()+1, registro[0], registro[1], registro[2], EXISTE2});
+        }
         cargaDatosTabla(modelo);
     }
     
