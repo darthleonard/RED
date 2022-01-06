@@ -34,6 +34,7 @@ public class FormatoTabla extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
         setBackground(new Color(20,20,20));
         table.setForeground(Color.black);
+        setToolTipText(null);
         switch(Integer.parseInt(table.getValueAt(row,4).toString())) {
             case Escaner.EXISTE: setForeground(new Color(229,226,221)); break;
             case Escaner.EXISTE2: setForeground(new Color(102,100,96)); break;
