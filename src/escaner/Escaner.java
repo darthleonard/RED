@@ -238,7 +238,8 @@ public class Escaner extends javax.swing.JFrame {
      */
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    @SuppressWarnings("deprecation")
+	private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHosts = new javax.swing.JTable();
