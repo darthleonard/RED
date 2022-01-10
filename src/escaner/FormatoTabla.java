@@ -22,10 +22,18 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import escaner.gui.TablePanel;
+import escaner.services.DeviceStatus;
+
 public class FormatoTabla extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;
 	private Escaner escaner;
+	private TablePanel tablePanel;
     
+	public FormatoTabla(TablePanel tablePanel) {
+		this.tablePanel = tablePanel;
+    }
+	
     public FormatoTabla(Escaner escaner) {
         this.escaner = escaner;
     }
@@ -36,20 +44,22 @@ public class FormatoTabla extends DefaultTableCellRenderer {
         table.setForeground(Color.black);
         setToolTipText(null);
         switch(Integer.parseInt(table.getValueAt(row,4).toString())) {
-            case Escaner.EXISTE: setForeground(new Color(229,226,221)); break;
-            case Escaner.EXISTE2: setForeground(new Color(102,100,96)); break;
-            case Escaner.CAMBIO:
+            case DeviceStatus.EXISTE: setForeground(new Color(229,226,221)); break;
+            case DeviceStatus.EXISTE2: setForeground(new Color(102,100,96)); break;
+            case DeviceStatus.CAMBIO:
             	setForeground(new Color(59, 131, 189));
                 if(column == 2) {
-                	String tooltip = escaner.BuscaAnterior(value.toString());
+                	String tooltip = escaner == null 
+                			? tablePanel.BuscaAnterior(value.toString())
+                			: escaner.BuscaAnterior(value.toString());
                 	if(tooltip == "") {
                 		break;
                 	}
                     setToolTipText("IP Anterior: " + tooltip);
                 }
                 break;
-            case Escaner.NUEVO: setForeground(new Color(203, 50, 52)); break;
-            case Escaner.NOIDENTIFICADO: setForeground(new Color(229,190,1)); break;
+            case DeviceStatus.NUEVO: setForeground(new Color(203, 50, 52)); break;
+            case DeviceStatus.NOIDENTIFICADO: setForeground(new Color(229,190,1)); break;
         }
 
         super.getTableCellRendererComponent(table, value, selected, focused, row, column);
