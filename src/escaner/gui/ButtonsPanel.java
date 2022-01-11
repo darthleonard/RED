@@ -3,6 +3,10 @@ package escaner.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -73,14 +77,14 @@ public class ButtonsPanel extends JPanel {
 
 	private void addListeners() {
 		btnSave.setEventHandler(new SaveEvent());
-		btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseReleased(java.awt.event.MouseEvent evt) {
+		btnSave.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent evt) {
 				escanerFrame.guardarTabla();
 			}
 		});
 
-		btnArp.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseReleased(java.awt.event.MouseEvent evt) {
+		btnArp.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent evt) {
 				escanerFrame.loadArpTable();
 			}
 		});
@@ -88,20 +92,20 @@ public class ButtonsPanel extends JPanel {
 		PingEvent pingEvent = new PingEvent(cmbInterfaces);
 		btnPing.setEventHandler(pingEvent);
 
-		btnConfig.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseReleased(java.awt.event.MouseEvent evt) {
+		btnConfig.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent evt) {
 				Mensajes.MensajeAlerta("Lo siento :(", "No implementado aun :/");
 			}
 		});
 
-		btnDeleteRecord.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseReleased(java.awt.event.MouseEvent evt) {
+		btnDeleteRecord.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent evt) {
 				escanerFrame.eliminaRegistrosSeleccionados();
 			}
 		});
 
-		cmbInterfaces.addItemListener(new java.awt.event.ItemListener() {
-			public void itemStateChanged(java.awt.event.ItemEvent evt) {
+		cmbInterfaces.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent evt) {
 				escanerFrame.setSelectedAdapter((Adaptador) cmbInterfaces.getSelectedObjects()[0]);
 			}
 		});
