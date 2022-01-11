@@ -21,7 +21,7 @@ import escaner.tools.Tool;
 
 public class EscanerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private static final String title = "Registro de Equipos en Red v1.2";
+	private static final String title = "Registro de Equipos en Red";
 	
 	private ArrayList<String[]> registros;
 	
