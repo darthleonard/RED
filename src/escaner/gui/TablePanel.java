@@ -1,6 +1,7 @@
 package escaner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -18,44 +19,21 @@ import escaner.tools.Mensajes;
 
 public class TablePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final int EXISTE = 0;
-	public static final int EXISTE2 = 1;
-	public static final int CAMBIO = 2;
-	public static final int NUEVO = 3;
-	public static final int NOIDENTIFICADO = 4;
+	public static final int EXIST = 0;
+	public static final int OFFLINE = 1;
+	public static final int CHANGED = 2;
+	public static final int NEW = 3;
+	public static final int UNKNOWN = 4;
 
 	private JScrollPane scrollPane;
-	private JTable tblHosts;
+	private JTable hostsTable;
 	private ArrayList<String[]> dataSource;
 
-	private final String cabecera[] = new String[] { "", "IP", "MAC", "Descripcion", "Status" };
+	private final String headers[] = new String[] { "", "IP", "MAC", "Descripcion", "Status" };
 
 	public TablePanel() {
 		initComponents();
-
-		tblHosts.setModel(new DefaultTableModel(new Object[][] {}, cabecera) {
-			private static final long serialVersionUID = 1L;
-			boolean[] canEdit = new boolean[] { false, false, false, true };
-
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		});
-		tblHosts.setSelectionForeground(new java.awt.Color(102, 255, 102));
-		scrollPane.setViewportView(tblHosts);
-		if (tblHosts.getColumnModel().getColumnCount() > 0) {
-			tblHosts.getColumnModel().getColumn(0).setResizable(false);
-		}
-
-		DefaultTableModel modelo = getDefaultTableModel();
-		FormatoTabla ft = new FormatoTabla(this);
-		tblHosts.setDefaultRenderer (Object.class, ft);
-		tblHosts.setModel(modelo);
-		tblHosts.getColumnModel().getColumn(0).setMaxWidth(40);
-		hideStatusColumn();
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblHosts.getModel());
-		tblHosts.setRowSorter(sorter);
-
+		configTable();
 		addComponents();
 	}
 
@@ -66,52 +44,73 @@ public class TablePanel extends JPanel {
 		updateTableDta(dataSource);
 	}
 
-	public void eliminaRegistrosSeleccionados() {
-		DefaultTableModel dtm = (DefaultTableModel) tblHosts.getModel();
-		int[] a = tblHosts.getSelectedRows();
-		for (int i = a.length - 1; i >= 0; i--) {
-			dtm.removeRow(a[i]);
+	public void deleteSelectedRecords() {
+		DefaultTableModel tableModel = (DefaultTableModel) hostsTable.getModel();
+		int[] rows = hostsTable.getSelectedRows();
+		for (int row = rows.length - 1; row >= 0; row--) {
+			tableModel.removeRow(rows[row]);
 		}
 	}
-	
-	public void guardarTabla() {
-        int res = JOptionPane.showConfirmDialog(null, "¿Deseas guardar?", "Guardar", JOptionPane.OK_CANCEL_OPTION);        
-        if(res == 0) {
-            try {
-                Archivos a = new Archivos();
-                ArrayList<String[]> datos = new ArrayList<String[]>();
-                TableModel tableModel = tblHosts.getModel();
-                tableModel.getColumnCount();
-                int fils = tableModel.getRowCount();
-                
-                for(int i = 0; i < fils; i++) {
-                    datos.add(
-                        new String[]{
-                            tableModel.getValueAt(i,1).toString(),
-                            tableModel.getValueAt(i,2).toString(),
-                            tableModel.getValueAt(i,3).toString()
-                        }
-                    );
-                }
-                a.Guardar(datos);
-            } catch (FileNotFoundException ex) {
-                Mensajes.MensajeError("ERROR", "No se localizo el archivo de datos");
-            }
-        }
-    }
-	
-	public String BuscaAnterior(String aux) {
-        for (int i = 0; i < dataSource.size(); i++) {
-            String[] get = dataSource.get(i);
-            if(get[1].equals(aux))
-                return get[0];
-        }
-        return "";
-    }
+
+	public void saveTable() {
+		int response = JOptionPane.showConfirmDialog(null, "¿Deseas guardar?", "Guardar", JOptionPane.OK_CANCEL_OPTION);
+		if (response == 0) {
+			try {
+				Archivos archivos = new Archivos();
+				ArrayList<String[]> dataSource = new ArrayList<String[]>();
+				TableModel tableModel = hostsTable.getModel();
+				tableModel.getColumnCount();
+				int rowsCount = tableModel.getRowCount();
+
+				for (int i = 0; i < rowsCount; i++) {
+					dataSource.add(new String[] { tableModel.getValueAt(i, 1).toString(),
+							tableModel.getValueAt(i, 2).toString(), tableModel.getValueAt(i, 3).toString() });
+				}
+				archivos.Guardar(dataSource);
+			} catch (FileNotFoundException ex) {
+				Mensajes.MensajeError("ERROR", "No se localizo el archivo de datos");
+			}
+		}
+	}
+
+	public String searchPrevious(String macAddress) {
+		for (int i = 0; i < dataSource.size(); i++) {
+			String[] record = dataSource.get(i);
+			if (record[1].equals(macAddress)) {
+				return record[0];
+			}
+		}
+		return null;
+	}
 
 	private void initComponents() {
 		scrollPane = new JScrollPane();
-		tblHosts = new JTable();
+		hostsTable = new JTable();
+	}
+
+	private void configTable() {
+		hostsTable.setModel(new DefaultTableModel(new Object[][] {}, headers) {
+			private static final long serialVersionUID = 1L;
+			boolean[] canEdit = new boolean[] { false, false, false, true };
+
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		});
+		hostsTable.setSelectionForeground(new Color(102, 255, 102));
+		scrollPane.setViewportView(hostsTable);
+		if (hostsTable.getColumnModel().getColumnCount() > 0) {
+			hostsTable.getColumnModel().getColumn(0).setResizable(false);
+		}
+
+		DefaultTableModel tableModel = getDefaultTableModel();
+		FormatoTabla ft = new FormatoTabla(this);
+		hostsTable.setDefaultRenderer(Object.class, ft);
+		hostsTable.setModel(tableModel);
+		hostsTable.getColumnModel().getColumn(0).setMaxWidth(40);
+		hideStatusColumn();
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(hostsTable.getModel());
+		hostsTable.setRowSorter(sorter);
 	}
 
 	private void addComponents() {
@@ -120,12 +119,12 @@ public class TablePanel extends JPanel {
 	}
 
 	private DefaultTableModel getDefaultTableModel() {
-		return new DefaultTableModel(null, cabecera) {
+		return new DefaultTableModel(null, headers) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean isCellEditable(int i, int i1) {
-				return getColumnName(i1).equals(cabecera[3]);
+				return getColumnName(i1).equals(headers[3]);
 			}
 		};
 	}
@@ -133,44 +132,44 @@ public class TablePanel extends JPanel {
 	private void updateTableDta(ArrayList<String[]> dataSource) {
 		String ip;
 		String mac;
-		String descripcion;
-		int estado;
-		DefaultTableModel modelo = (DefaultTableModel) tblHosts.getModel();
-		clearModel(modelo);
-		ArrayList<String[]> registrosDelArchivo = new ArrayList<String[]>(this.dataSource);
+		String description;
+		int status;
+		DefaultTableModel tableModel = (DefaultTableModel) hostsTable.getModel();
+		clearModel(tableModel);
+		ArrayList<String[]> fileRecords = new ArrayList<String[]>(this.dataSource);
 
-		for (String get[] : dataSource) {
-			estado = NUEVO;
-			ip = get[0].trim();
-			mac = get[1].trim();
-			descripcion = get[2].trim();
+		for (String data[] : dataSource) {
+			status = NEW;
+			ip = data[0].trim();
+			mac = data[1].trim();
+			description = data[2].trim();
 
-			for (String registro[] : this.dataSource) {
-				if (registro[1].equals(mac)) { // la mac ya esta en la lista
-					registrosDelArchivo.remove(registro);
-					if (ip.equals(registro[0])) { // la ip no a cambiado
-						if (registro[2].length() != 0) { // el registro se encuentra correcto
-							descripcion = registro[2];
-							estado = EXISTE;
+			for (String record[] : this.dataSource) {
+				if (record[1].equals(mac)) { // la mac ya esta en la lista
+					fileRecords.remove(record);
+					if (ip.equals(record[0])) { // la ip no a cambiado
+						if (record[2].length() != 0) { // el registro se encuentra correcto
+							description = record[2];
+							status = EXIST;
 						} else { // no se ha identificado
-							estado = NOIDENTIFICADO;
+							status = UNKNOWN;
 						}
 					} else { // la ip es dferente
-						descripcion = registro[2];
-						estado = CAMBIO;
+						description = record[2];
+						status = CHANGED;
 					}
 					break;
 				} else { // la mac no esta en la lista
-					estado = NUEVO;
+					status = NEW;
 				}
 			}
-			modelo.addRow(new Object[] { modelo.getRowCount() + 1, ip, mac, descripcion, estado });
+			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, ip, mac, description, status });
 		}
-		for (String registro[] : registrosDelArchivo) {
-			modelo.addRow(new Object[] { modelo.getRowCount() + 1, registro[0], registro[1], registro[2], EXISTE2 });
+		for (String registro[] : fileRecords) {
+			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, registro[0], registro[1], registro[2], OFFLINE });
 		}
 
-		tblHosts.setModel(modelo);
+		hostsTable.setModel(tableModel);
 	}
 
 	private void clearModel(DefaultTableModel model) {
@@ -179,7 +178,7 @@ public class TablePanel extends JPanel {
 	}
 
 	private void hideStatusColumn() {
-		tblHosts.getColumnModel().getColumn(4).setMinWidth(0);
-		tblHosts.getColumnModel().getColumn(4).setMaxWidth(0);
+		hostsTable.getColumnModel().getColumn(4).setMinWidth(0);
+		hostsTable.getColumnModel().getColumn(4).setMaxWidth(0);
 	}
 }

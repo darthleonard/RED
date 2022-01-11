@@ -50,9 +50,9 @@ public class FormatoTabla extends DefaultTableCellRenderer {
             	setForeground(new Color(59, 131, 189));
                 if(column == 2) {
                 	String tooltip = escaner == null 
-                			? tablePanel.BuscaAnterior(value.toString())
+                			? tablePanel.searchPrevious(value.toString())
                 			: escaner.BuscaAnterior(value.toString());
-                	if(tooltip == "") {
+                	if(tooltip == null) {
                 		break;
                 	}
                     setToolTipText("IP Anterior: " + tooltip);

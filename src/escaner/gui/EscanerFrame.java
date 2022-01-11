@@ -63,11 +63,11 @@ public class EscanerFrame extends JFrame {
     }
 	
 	public void eliminaRegistrosSeleccionados() {
-		tablePanel.eliminaRegistrosSeleccionados();
+		tablePanel.deleteSelectedRecords();
     }
 	
 	public void guardarTabla() {
-		tablePanel.guardarTabla();
+		tablePanel.saveTable();
 	}
 
 	private void init() {
