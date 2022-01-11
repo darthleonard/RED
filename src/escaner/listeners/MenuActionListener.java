@@ -3,12 +3,15 @@ package escaner.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
+import escaner.gui.EscanerFrame;
+import escaner.tools.Mensajes;
 
 public class MenuActionListener implements ActionListener {
+	EscanerFrame escanerFrame;
 	private MenuActions menuAction;
 
-	public MenuActionListener(MenuActions menuAction) {
+	public MenuActionListener(EscanerFrame escanerFrame, MenuActions menuAction) {
+		this.escanerFrame = escanerFrame;
 		this.menuAction = menuAction;
 	}
 
@@ -16,21 +19,27 @@ public class MenuActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (menuAction) {
 		case Save:
-			// itmGuardarActionPerformed(evt);
+			escanerFrame.guardarTabla();
 			break;
 		case LoadArpTable:
-			// itmTablaArpActionPerformed(evt);
+			escanerFrame.loadArpTable();
 			break;
 		case ClearArpTable:
-			// jMenuItem1ActionPerformed(evt);
+			/*Tool t = new Tool();
+	        try {
+	            t.LimpiaArp();
+	            JOptionPane.showMessageDialog(this, "La cache ARP del equipo ha sido limpiada");
+	        } catch (IOException ex) {
+	            Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
+	        }*/
+	        Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
 			break;
 		case Ping:
-			// itmPingActionPerformed(evt);
+			escanerFrame.openPingTool();
 			break;
 		default:
 			break;
 		}
-		JOptionPane.showMessageDialog(null, e.paramString());
 	}
 
 }

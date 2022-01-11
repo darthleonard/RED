@@ -11,6 +11,7 @@ import escaner.listeners.MenuActionListener;
 import escaner.listeners.MenuActions;
 
 public class EscanerMenu {
+	private EscanerFrame escanerFrame;
 	private JMenuBar menuBar;
 	private JMenu jmFile;
 	private JMenu jmHelp;
@@ -27,7 +28,8 @@ public class EscanerMenu {
 	private EscanerMenuItem itmArpTable;
 	private Separator separator;
 
-	public EscanerMenu() {
+	public EscanerMenu(EscanerFrame escanerFrame) {
+		this.escanerFrame = escanerFrame;
 		initComponents();
 		configComponents();
 		addListeners();
@@ -64,10 +66,10 @@ public class EscanerMenu {
 	}
 	
 	private void addListeners() {
-		itmSave.addActionListener(new MenuActionListener(MenuActions.Save));
-		itmArpTable.addActionListener(new MenuActionListener(MenuActions.LoadArpTable));
-		itmClearArpTable.addActionListener(new MenuActionListener(MenuActions.ClearArpTable));
-		itmPing.addActionListener(new MenuActionListener(MenuActions.Ping));
+		itmSave.addActionListener(new MenuActionListener(escanerFrame, MenuActions.Save));
+		itmArpTable.addActionListener(new MenuActionListener(escanerFrame, MenuActions.LoadArpTable));
+		itmClearArpTable.addActionListener(new MenuActionListener(escanerFrame, MenuActions.ClearArpTable));
+		itmPing.addActionListener(new MenuActionListener(escanerFrame, MenuActions.Ping));
 		itmHelp.addActionListener(new HelpMenuActionListener(MenuActions.Help));
 		itmHelpSave.addActionListener(new HelpMenuActionListener(MenuActions.Save));
 		itmHelpLoadArpTable.addActionListener(new HelpMenuActionListener(MenuActions.LoadArpTable));

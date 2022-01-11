@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import escaner.Escaner;
+import escaner.PingFrame;
 import escaner.services.NetworkInterfacesService;
 import escaner.tools.Adaptador;
 import escaner.tools.Archivos;
@@ -21,7 +22,7 @@ import escaner.tools.Tool;
 
 public class EscanerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private static final String title = "Registro de Equipos en Red";
+	private static final String title = "Registro de Equipos en Red v1.2";
 	
 	private ArrayList<String[]> registros;
 	
@@ -69,7 +70,29 @@ public class EscanerFrame extends JFrame {
 	public void guardarTabla() {
 		tablePanel.saveTable();
 	}
+	
+	public void openPingTool() {
+		if(selectedAdapter == null) {
+			Mensajes.MensajeError("ERROR", "No se ha seleccionado ningun adaptador de red");
+			return;
+		}
+        if(selectedAdapter.isSupported()) {
+            NetworkInfo netInfo = new NetworkInfo(selectedAdapter.getIp(), selectedAdapter.getMask());
+            PingFrame pingFrame = new PingFrame(netInfo);
+            pingFrame.setVisible(true);
+        } else {
+            Mensajes.MensajeError("ERROR", "El adaptador seleccionado no cuenta con una IPv4 valida");
+        }
+	}
 
+	public String getCurrentNetworkIp() {
+		return currentNetworkIp;
+	}
+	
+	public int getCurrentNetworkMask() {
+		return currentNetworkMask;
+	}
+	
 	private void init() {
 		ArrayList<Adaptador> interfaces = new ArrayList<Adaptador>();
 		try {
@@ -82,7 +105,7 @@ public class EscanerFrame extends JFrame {
 		this.tablePanel = new TablePanel();
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icono.png")));
-		setJMenuBar(new EscanerMenu().CreateMenu());
+		setJMenuBar(new EscanerMenu(this).CreateMenu());
 		setLayout(new BorderLayout());
 		add(buttonsPanel, BorderLayout.NORTH);
 		add(tablePanel, BorderLayout.CENTER);
@@ -97,14 +120,6 @@ public class EscanerFrame extends JFrame {
             Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-	
-	public String getCurrentNetworkIp() {
-		return currentNetworkIp;
-	}
-	
-	public int getCurrentNetworkMask() {
-		return currentNetworkMask;
-	}
 	
 	public static void main(String[] args) {
 		try {

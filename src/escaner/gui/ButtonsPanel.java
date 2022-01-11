@@ -15,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import escaner.events.PingEvent;
 import escaner.events.SaveEvent;
 import escaner.tools.Adaptador;
 import escaner.tools.Mensajes;
@@ -89,8 +88,11 @@ public class ButtonsPanel extends JPanel {
 			}
 		});
 
-		PingEvent pingEvent = new PingEvent(cmbInterfaces);
-		btnPing.setEventHandler(pingEvent);
+		btnPing.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent evt) {
+				escanerFrame.openPingTool();
+			}
+		});
 
 		btnConfig.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent evt) {

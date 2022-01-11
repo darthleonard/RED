@@ -7,6 +7,7 @@ import escaner.tools.Adaptador;
 import escaner.tools.Mensajes;
 import escaner.tools.NetworkInfo;
 
+// Class unused, kept as example of IEscanerEvent
 public class PingEvent implements IEscanerEvent {
 	private JComboBox<Adaptador> cmbInterfaces;
 	
