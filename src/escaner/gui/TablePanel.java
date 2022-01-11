@@ -14,16 +14,12 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import escaner.FormatoTabla;
+import escaner.services.DeviceStatus;
 import escaner.tools.Archivos;
 import escaner.tools.Mensajes;
 
 public class TablePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final int EXIST = 0;
-	public static final int OFFLINE = 1;
-	public static final int CHANGED = 2;
-	public static final int NEW = 3;
-	public static final int UNKNOWN = 4;
 
 	private JScrollPane scrollPane;
 	private JTable hostsTable;
@@ -139,7 +135,7 @@ public class TablePanel extends JPanel {
 		ArrayList<String[]> fileRecords = new ArrayList<String[]>(this.dataSource);
 
 		for (String data[] : dataSource) {
-			status = NEW;
+			status = DeviceStatus.NEW;
 			ip = data[0].trim();
 			mac = data[1].trim();
 			description = data[2].trim();
@@ -150,23 +146,24 @@ public class TablePanel extends JPanel {
 					if (ip.equals(record[0])) { // la ip no a cambiado
 						if (record[2].length() != 0) { // el registro se encuentra correcto
 							description = record[2];
-							status = EXIST;
+							status = DeviceStatus.EXIST;
 						} else { // no se ha identificado
-							status = UNKNOWN;
+							status = DeviceStatus.UNKNOWN;
 						}
 					} else { // la ip es dferente
 						description = record[2];
-						status = CHANGED;
+						status = DeviceStatus.CHANGED;
 					}
 					break;
 				} else { // la mac no esta en la lista
-					status = NEW;
+					status = DeviceStatus.NEW;
 				}
 			}
 			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, ip, mac, description, status });
 		}
 		for (String registro[] : fileRecords) {
-			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, registro[0], registro[1], registro[2], OFFLINE });
+			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, registro[0], registro[1], registro[2],
+					DeviceStatus.OFFLINE });
 		}
 
 		hostsTable.setModel(tableModel);
