@@ -44,9 +44,9 @@ public class FormatoTabla extends DefaultTableCellRenderer {
         table.setForeground(Color.black);
         setToolTipText(null);
         switch(Integer.parseInt(table.getValueAt(row,4).toString())) {
-            case DeviceStatus.EXISTE: setForeground(new Color(229,226,221)); break;
-            case DeviceStatus.EXISTE2: setForeground(new Color(102,100,96)); break;
-            case DeviceStatus.CAMBIO:
+            case DeviceStatus.EXIST: setForeground(new Color(229,226,221)); break;
+            case DeviceStatus.OFFLINE: setForeground(new Color(102,100,96)); break;
+            case DeviceStatus.CHANGED:
             	setForeground(new Color(59, 131, 189));
                 if(column == 2) {
                 	String tooltip = escaner == null 
@@ -58,8 +58,8 @@ public class FormatoTabla extends DefaultTableCellRenderer {
                     setToolTipText("IP Anterior: " + tooltip);
                 }
                 break;
-            case DeviceStatus.NUEVO: setForeground(new Color(203, 50, 52)); break;
-            case DeviceStatus.NOIDENTIFICADO: setForeground(new Color(229,190,1)); break;
+            case DeviceStatus.NEW: setForeground(new Color(203, 50, 52)); break;
+            case DeviceStatus.UNKNOWN: setForeground(new Color(229,190,1)); break;
         }
 
         super.getTableCellRendererComponent(table, value, selected, focused, row, column);
