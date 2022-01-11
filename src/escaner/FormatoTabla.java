@@ -27,15 +27,10 @@ import escaner.services.DeviceStatus;
 
 public class FormatoTabla extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;
-	private Escaner escaner;
 	private TablePanel tablePanel;
     
 	public FormatoTabla(TablePanel tablePanel) {
 		this.tablePanel = tablePanel;
-    }
-	
-    public FormatoTabla(Escaner escaner) {
-        this.escaner = escaner;
     }
     
     @Override
@@ -49,9 +44,7 @@ public class FormatoTabla extends DefaultTableCellRenderer {
             case DeviceStatus.CHANGED:
             	setForeground(new Color(59, 131, 189));
                 if(column == 2) {
-                	String tooltip = escaner == null 
-                			? tablePanel.searchPrevious(value.toString())
-                			: escaner.BuscaAnterior(value.toString());
+                	String tooltip = tablePanel.searchPrevious(value.toString());
                 	if(tooltip == null) {
                 		break;
                 	}

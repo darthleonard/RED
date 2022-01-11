@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import escaner.Escaner;
 import escaner.PingFrame;
@@ -120,35 +119,4 @@ public class EscanerFrame extends JFrame {
             Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-	
-	public static void main(String[] args) {
-		try {
-			java.util.Properties props = new java.util.Properties();
-			props.put("logoString", "darthleonard");
-			com.jtattoo.plaf.hifi.HiFiLookAndFeel.setCurrentTheme(props);
-			javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException ex) {
-			Mensajes.MensajeError("Error en LookAndFeel", "No se encontro la libreria de L&F en el equipo");
-			defaultLAF();
-		}
-
-		java.awt.EventQueue.invokeLater(() -> {
-			new EscanerFrame().setVisible(true);
-		});
-	}
-
-	private static void defaultLAF() {
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Windows".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException ex) {
-			Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
 }
