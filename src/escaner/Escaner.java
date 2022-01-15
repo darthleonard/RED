@@ -16,13 +16,10 @@
  */
 package escaner;
 
-import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.Border;
 
 import escaner.gui.EscanerFrame;
 import escaner.tools.Mensajes;
@@ -33,9 +30,6 @@ import escaner.tools.Mensajes;
  */
 public class Escaner {
 	public static void main(String args[]) {
-		javax.swing.UIManager.put("ToolTip.background", new javax.swing.plaf.ColorUIResource(163, 245, 82));
-		Border border = BorderFactory.createLineBorder(new Color(78, 154, 6));
-		javax.swing.UIManager.put("ToolTip.border", border);
 		javax.swing.ToolTipManager.sharedInstance().setDismissDelay(10000);
 
 		try {
