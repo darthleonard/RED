@@ -53,7 +53,7 @@ public class Ping extends SwingWorker<Void, Void> {
 		String ip;
 		String status;
 		int hostsActivos = 0;
-		progressBar.setMaximum(255);
+		progressBar.setMaximum(networkInfo.getCantidadHosts());
 		textArea.setText("");
 		try {
 			container.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

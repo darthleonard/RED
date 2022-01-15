@@ -32,7 +32,7 @@ import escaner.tools.PingArgs;
  */
 public class PingFrame extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
-	private Ping pw;
+	private Ping ping;
     private NetworkInfo networkInfo;
     private boolean Ejecutando = false;
     
@@ -97,6 +97,9 @@ public class PingFrame extends javax.swing.JFrame {
         txtDirRed.setText("192.168.1.0");
 
         txtMaskRed.setText("24");
+        
+        txtDirRed.setEditable(false);
+        txtMaskRed.setEditable(false);
 
         jLabel3.setText("Tiempo de espera");
 
@@ -211,14 +214,14 @@ public class PingFrame extends javax.swing.JFrame {
     public void switchControles() {
         if(!Ejecutando) {
             jButton1.setText("Cancelar");
-            txtDirRed.setEditable(false);
-            txtMaskRed.setEditable(false);
+//            txtDirRed.setEditable(false);
+//            txtMaskRed.setEditable(false);
             txtLatencia.setEditable(false);
             Ejecutando = true;
         } else {
             jButton1.setText("Comenzar");
-            txtDirRed.setEditable(true);
-            txtMaskRed.setEditable(true);
+//            txtDirRed.setEditable(true);
+//            txtMaskRed.setEditable(true);
             txtLatencia.setEditable(true);
             Ejecutando = false;
         }
@@ -236,10 +239,10 @@ public class PingFrame extends javax.swing.JFrame {
         		txtDirecciones,
         		lblConteoHosts,
         		getContentPane());
-        pw = new Ping(pingArgs);
-        pw.setNetinfo(networkInfo);
-        pw.setTiempo(Integer.parseInt(txtLatencia.getText()));
-        pw.execute();
+        ping = new Ping(pingArgs);
+        ping.setNetinfo(networkInfo);
+        ping.setTiempo(Integer.parseInt(txtLatencia.getText()));
+        ping.execute();
     }
     
     public void setNetworkDataRed(String red, String mask) {
@@ -251,8 +254,8 @@ public class PingFrame extends javax.swing.JFrame {
         if(!Ejecutando) {
             ejecutarPing();
         } else {
-            pw.cancel(true);
-            pw = null;
+            ping.cancel(true);
+            ping = null;
         }
     }//GEN-LAST:event_jButton1ActionPerformed
     
