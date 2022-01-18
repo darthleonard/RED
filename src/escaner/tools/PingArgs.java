@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 
-import escaner.PingFrame;
+import escaner.gui.PingFrame;
 
 public class PingArgs {
 	public PingFrame pingFrame;

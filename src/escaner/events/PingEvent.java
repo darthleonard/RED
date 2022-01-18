@@ -2,7 +2,7 @@ package escaner.events;
 
 import javax.swing.JComboBox;
 
-import escaner.PingFrame;
+import escaner.gui.PingFrame;
 import escaner.tools.Adaptador;
 import escaner.tools.Mensajes;
 import escaner.tools.NetworkInfo;
