@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 import escaner.Escaner;
-import escaner.PingFrame;
 import escaner.services.NetworkInterfacesService;
 import escaner.tools.Adaptador;
 import escaner.tools.Archivos;

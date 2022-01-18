@@ -26,7 +26,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
-import escaner.PingFrame;
+import escaner.gui.PingFrame;
 
 public class Ping extends SwingWorker<Void, Void> {
 	private PingFrame pingFrame;

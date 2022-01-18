@@ -13,7 +13,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import escaner.FormatoTabla;
 import escaner.services.DeviceStatus;
 import escaner.tools.Archivos;
 import escaner.tools.Mensajes;
