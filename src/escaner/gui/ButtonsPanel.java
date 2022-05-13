@@ -51,8 +51,8 @@ public class ButtonsPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		lblIp = new JLabel();
-		lblMask = new JLabel();
+		lblIp = new JLabel("Direccion de red:");
+		lblMask = new JLabel("Mascara de red:");
 		lblIpValue = new JLabel();
 		lblMaskVaue = new JLabel();
 		btnSave = new EscanerButton("/images/guardar.png", "Guardar");
@@ -68,8 +68,6 @@ public class ButtonsPanel extends JPanel {
 		cmbInterfaces.setModel(new DefaultComboBoxModel(interfaces.toArray()));
 		Adaptador adapter = (Adaptador) cmbInterfaces.getSelectedObjects()[0];
 		escanerFrame.setSelectedAdapter(adapter);
-		lblIp.setText("Direccion de red:");
-		lblMask.setText("Mascara de red:");
 		lblIpValue.setText(escanerFrame.getCurrentNetworkIp());
 		lblMaskVaue.setText(escanerFrame.getCurrentNetworkMask() + "");
 	}

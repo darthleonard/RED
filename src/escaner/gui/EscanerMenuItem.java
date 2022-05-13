@@ -12,7 +12,6 @@ public class EscanerMenuItem extends JMenuItem {
 		setText(text);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public EscanerMenuItem(int keyEventCode, String text) {
 		setAccelerator(KeyStroke.getKeyStroke(keyEventCode, InputEvent.CTRL_MASK));
 		setText(text);

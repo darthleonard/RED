@@ -23,7 +23,7 @@ public class Tool {
     public Tool(String red, int mask) {
         this.red = red;
         this.mask = mask;
-        datos = new ArrayList();
+        datos = new ArrayList<String[]>();
         convierteRed();
         Arp();
     }
@@ -60,11 +60,11 @@ public class Tool {
     private String[] datosLocales() throws SocketException {
         boolean flag = true;
         InetAddress inet = null;
-        Enumeration e = NetworkInterface.getNetworkInterfaces();
+        Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
         
         while(e.hasMoreElements() && flag) {
             NetworkInterface n = (NetworkInterface) e.nextElement();
-            Enumeration ee = n.getInetAddresses();
+            Enumeration<InetAddress> ee = n.getInetAddresses();
             
             while (ee.hasMoreElements() && flag) {
                 inet = (InetAddress) ee.nextElement();
@@ -169,15 +169,11 @@ public class Tool {
         char[] ip = new char[15];
         char[] mac = new char[17];
         
-        String salida, a, b;
-        if((salida = br.readLine()) != null) {
+        String a, b;
+        if(br.readLine() != null) {
             br.readLine(); // lee salto de pantalla
             br.readLine(); // lee cabecera de tabla
-            int z;
             while(br.ready()) {
-                /*z = br.read();
-                System.out.println((char)z + " " + z);
-                f.setResultado("" + (char)z);*/
                 br.skip(2);
                 br.read(ip);
                 br.skip(7);
