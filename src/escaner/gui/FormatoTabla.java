@@ -27,6 +27,9 @@ public class FormatoTabla extends DefaultTableCellRenderer {
             case DeviceStatus.CHANGED:
             	setForeground(new Color(59, 131, 189));
                 if(column == 2) {
+                    if(value == null) {
+                        value = "";
+                    }
                 	String tooltip = tablePanel.searchPrevious(value.toString());
                 	if(tooltip == null) {
                 		break;
