@@ -18,27 +18,28 @@ public class MenuActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (menuAction) {
-		case Save:
-			escanerFrame.guardarTabla();
-			break;
-		case LoadArpTable:
-			escanerFrame.loadArpTable();
-			break;
-		case ClearArpTable:
-			/*Tool t = new Tool();
+			case Save:
+				escanerFrame.guardarTabla();
+				break;
+			case LoadArpTable:
+				escanerFrame.loadArpTable();
+				break;
+			case ClearArpTable:
+				/*Tool t = new Tool();
 	        try {
 	            t.LimpiaArp();
 	            JOptionPane.showMessageDialog(this, "La cache ARP del equipo ha sido limpiada");
 	        } catch (IOException ex) {
 	            Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
 	        }*/
-	        Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
-			break;
-		case Ping:
-			escanerFrame.openPingTool();
-			break;
-		default:
-			break;
+				Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
+				break;
+			case Ping:
+				escanerFrame.openPingTool();
+				break;
+			default:
+				Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
+				break;
 		}
 	}
 

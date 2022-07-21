@@ -7,5 +7,6 @@ public enum MenuActions {
 	Ping,
 	Help,
 	Colors,
-	About
+	About,
+	UnderConstruction
 }

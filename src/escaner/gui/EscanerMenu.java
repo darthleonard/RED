@@ -24,6 +24,8 @@ public class EscanerMenu {
 	private EscanerMenuItem itmHelpPing;
 	private EscanerMenuItem itmHelpColors;
 	private EscanerMenuItem itmSave;
+	private EscanerMenuItem itmFileChooser;
+	private EscanerMenuItem itmFileConfig;
 	private EscanerMenuItem itmPing;
 	private EscanerMenuItem itmArpTable;
 	private Separator separator;
@@ -44,6 +46,8 @@ public class EscanerMenu {
 		menuBar = new JMenuBar();
 		jmFile = new JMenu();
 		itmSave = new EscanerMenuItem(KeyEvent.VK_S, "Guardar cambios");
+		itmFileChooser = new EscanerMenuItem("Abrir archivo");
+		itmFileConfig = new EscanerMenuItem("Configurar archivo");
 		jmTools = new JMenu();
 		itmArpTable = new EscanerMenuItem(KeyEvent.VK_O, "Cargar tabla ARP");
 		itmClearArpTable = new EscanerMenuItem(KeyEvent.VK_L, "Limpiar tabla ARP");
@@ -67,6 +71,8 @@ public class EscanerMenu {
 	
 	private void addListeners() {
 		itmSave.addActionListener(new MenuActionListener(escanerFrame, MenuActions.Save));
+		itmFileChooser.addActionListener(new MenuActionListener(escanerFrame, MenuActions.UnderConstruction));
+		itmFileConfig.addActionListener(new MenuActionListener(escanerFrame, MenuActions.UnderConstruction));
 		itmArpTable.addActionListener(new MenuActionListener(escanerFrame, MenuActions.LoadArpTable));
 		itmClearArpTable.addActionListener(new MenuActionListener(escanerFrame, MenuActions.ClearArpTable));
 		itmPing.addActionListener(new MenuActionListener(escanerFrame, MenuActions.Ping));
@@ -80,6 +86,8 @@ public class EscanerMenu {
 
 	private void addComponents() {
 		jmFile.add(itmSave);
+		jmFile.add(itmFileChooser);
+		jmFile.add(itmFileConfig);
 		jmTools.add(itmArpTable);
 		jmTools.add(itmClearArpTable);
 		jmTools.add(itmPing);
