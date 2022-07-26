@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import escaner.gui.EscanerFrame;
+import escaner.tools.FileChooser;
 import escaner.tools.Mensajes;
 
 public class MenuActionListener implements ActionListener {
@@ -21,17 +22,27 @@ public class MenuActionListener implements ActionListener {
 			case Save:
 				escanerFrame.guardarTabla();
 				break;
+			case SaveAs:
+				//new FileChooser().Save();
+				//escanerFrame.guardarTabla();
+				//escanerFrame.loadSavedData();
+				Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
+				break;
+			case ChooseFile:
+				new FileChooser().Open();
+				escanerFrame.loadSavedData();
+				break;
 			case LoadArpTable:
 				escanerFrame.loadArpTable();
 				break;
 			case ClearArpTable:
 				/*Tool t = new Tool();
-	        try {
-	            t.LimpiaArp();
-	            JOptionPane.showMessageDialog(this, "La cache ARP del equipo ha sido limpiada");
-	        } catch (IOException ex) {
-	            Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
-	        }*/
+				try {
+					t.LimpiaArp();
+					JOptionPane.showMessageDialog(this, "La cache ARP del equipo ha sido limpiada");
+				} catch (IOException ex) {
+					Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
+				}*/
 				Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
 				break;
 			case Ping:

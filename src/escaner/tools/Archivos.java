@@ -7,8 +7,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import escaner.services.PreferencesService;
+
 public class Archivos {
-    String nombre = "directorio.sc";
+    private String nombre;
+    
+    public Archivos() {
+        nombre = new PreferencesService().GetDefultFilePath();
+    }
     
     public ArrayList<String[]> Leer() throws FileNotFoundException {
         ArrayList<String[]> list = new ArrayList<String[]>();
@@ -35,5 +41,10 @@ public class Archivos {
     public boolean ExisteArchivo() {
         File file = new File(nombre);
         return file.exists();
+    }
+
+    public String GetFileName() {
+        File file = new File(nombre);
+        return file.exists() ? file.getName() : nombre;
     }
 }

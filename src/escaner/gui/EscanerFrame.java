@@ -109,13 +109,18 @@ public class EscanerFrame extends JFrame {
 		add(tablePanel, BorderLayout.CENTER);
 	}
 	
-	private void loadSavedData() {
+	public void loadSavedData() {
         try {
             Archivos a = new Archivos();
+			BuildTitle(a);
             registros = a.Leer();
             tablePanel.setDataSource(registros);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Escaner.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+	private void BuildTitle(Archivos archivos) {
+		setTitle(title + " | " + archivos.GetFileName());
+	}
 }
