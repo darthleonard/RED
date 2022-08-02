@@ -6,20 +6,23 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import escaner.services.PreferencesService;
 
 public class FileChooser {
-    public void Save() {
+    public boolean Save() {
         JFileChooser fc = new JFileChooser();
         fc.setFileFilter(new FileNameExtensionFilter("Red datasource", "sc"));
         int response = fc.showSaveDialog(null);
-        if (response == JFileChooser.APPROVE_OPTION) {
-            //if(extension is invalid) not save
-            if (fc.getSelectedFile().exists()) {
-                Mensajes.MensajeAlerta("El archivo ya existe");
-                Save();
-                return;
-            } else {
-                new PreferencesService().SetDefaultFilePath(fc.getSelectedFile().getAbsolutePath());
-            }
+        if (response != JFileChooser.APPROVE_OPTION) {
+            return false;
         }
+        
+        //if(extension is invalid) not save
+        if (fc.getSelectedFile().exists()) {
+            Mensajes.MensajeAlerta("El archivo ya existe");
+            Save();
+            return false;
+        }
+
+        new PreferencesService().SetDefaultFilePath(fc.getSelectedFile().getAbsolutePath());
+        return true;
     }
 
     public void Open() {

@@ -10,25 +10,22 @@ import java.util.Scanner;
 import escaner.services.PreferencesService;
 
 public class Archivos {
-    private String nombre;
-    
-    public Archivos() {
-        nombre = new PreferencesService().GetDefultFilePath();
-    }
-    
+
     public ArrayList<String[]> Leer() throws FileNotFoundException {
         ArrayList<String[]> list = new ArrayList<String[]>();
-        if(ExisteArchivo()) {
+        String nombre = getGileNameFromPreferences();
+        if (ExisteArchivo()) {
             Scanner sc = new Scanner(new FileReader(nombre));
             while (sc.hasNext()) {
-                list.add(new String[]{sc.nextLine(), sc.nextLine(), sc.nextLine()});
+                list.add(new String[] { sc.nextLine(), sc.nextLine(), sc.nextLine() });
             }
             sc.close();
         }
         return list;
     }
-    
+
     public void Guardar(ArrayList<String[]> datos) throws FileNotFoundException {
+        String nombre = getGileNameFromPreferences();
         PrintWriter pw = new PrintWriter(nombre);
         for (int i = 0; i < datos.size(); i++) {
             pw.println(datos.get(i)[0]);
@@ -37,14 +34,20 @@ public class Archivos {
         }
         pw.close();
     }
-    
+
     public boolean ExisteArchivo() {
+        String nombre = getGileNameFromPreferences();
         File file = new File(nombre);
         return file.exists();
     }
 
     public String GetFileName() {
+        String nombre = getGileNameFromPreferences();
         File file = new File(nombre);
         return file.exists() ? file.getName() : nombre;
+    }
+
+    private String getGileNameFromPreferences() {
+        return new PreferencesService().GetDefultFilePath();
     }
 }

@@ -23,10 +23,10 @@ public class MenuActionListener implements ActionListener {
 				escanerFrame.guardarTabla();
 				break;
 			case SaveAs:
-				//new FileChooser().Save();
-				//escanerFrame.guardarTabla();
-				//escanerFrame.loadSavedData();
-				Mensajes.MensajeError("Lo siento :(", "No implementado aun :/");
+				if(new FileChooser().Save()) {
+					escanerFrame.guardarTabla();
+					escanerFrame.loadSavedData();
+				}
 				break;
 			case ChooseFile:
 				new FileChooser().Open();
