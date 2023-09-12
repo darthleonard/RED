@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/user/workspace/java/RED/lib/JTattoo-1.6.13.jar"/>
+	<classpathentry kind="lib" path="/home/user/workspace/java/RED/lib/sqlite-jdbc-3.43.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

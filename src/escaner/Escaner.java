@@ -1,8 +1,10 @@
 package escaner;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import escaner.gui.EscanerFrame;
@@ -24,7 +26,14 @@ public class Escaner {
 		}
 
 		java.awt.EventQueue.invokeLater(() -> {
-			new EscanerFrame().setVisible(true);
+			try {
+				new Initializer().Init();
+				new EscanerFrame().setVisible(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
+			}
 		});
 	}
 
