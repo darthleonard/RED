@@ -112,7 +112,7 @@ public class EscanerFrame extends JFrame {
 	public void loadSavedData() {
         try {
             Archivos a = new Archivos();
-			BuildTitle(a);
+			BuildTitle(a.GetFileName());
             registros = a.Leer();
             tablePanel.setDataSource(registros);
         } catch (FileNotFoundException ex) {
@@ -120,7 +120,7 @@ public class EscanerFrame extends JFrame {
         }
     }
 
-	private void BuildTitle(Archivos archivos) {
-		setTitle(title + " | " + archivos.GetFileName());
+	private void BuildTitle(String fileName) {
+		setTitle(title + " | " + fileName);
 	}
 }

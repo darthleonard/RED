@@ -13,7 +13,7 @@ public class Archivos {
 
     public ArrayList<String[]> Leer() throws FileNotFoundException {
         ArrayList<String[]> list = new ArrayList<String[]>();
-        String nombre = getGileNameFromPreferences();
+        String nombre = getFileNameFromPreferences();
         if (ExisteArchivo()) {
             Scanner sc = new Scanner(new FileReader(nombre));
             while (sc.hasNext()) {
@@ -25,7 +25,7 @@ public class Archivos {
     }
 
     public void Guardar(ArrayList<String[]> datos) throws FileNotFoundException {
-        String nombre = getGileNameFromPreferences();
+        String nombre = getFileNameFromPreferences();
         PrintWriter pw = new PrintWriter(nombre);
         for (int i = 0; i < datos.size(); i++) {
             pw.println(datos.get(i)[0]);
@@ -36,18 +36,18 @@ public class Archivos {
     }
 
     public boolean ExisteArchivo() {
-        String nombre = getGileNameFromPreferences();
+        String nombre = getFileNameFromPreferences();
         File file = new File(nombre);
         return file.exists();
     }
 
     public String GetFileName() {
-        String nombre = getGileNameFromPreferences();
+        String nombre = getFileNameFromPreferences();
         File file = new File(nombre);
         return file.exists() ? file.getName() : nombre;
     }
 
-    private String getGileNameFromPreferences() {
+    private String getFileNameFromPreferences() {
         return new PreferencesService().GetDefultFilePath();
     }
 }
