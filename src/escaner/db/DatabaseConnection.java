@@ -2,7 +2,6 @@ package escaner.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,17 +35,6 @@ public class DatabaseConnection {
 		return tableExist;
 	} 
 	
-	public void Insert(String ipAddress, String macAddress, String Description) throws SQLException {
-		Connection connection = getConnection();
-		String query = "INSERT INTO Devices (IpAddress, MacAddress, Description) VALUES(?,?,?)";
-		PreparedStatement pstmt = connection.prepareStatement(query);
-		pstmt.setString(1, ipAddress);
-		pstmt.setString(2, macAddress);
-		pstmt.setString(3, Description);
-		pstmt.executeUpdate();
-		connection.close();
-	}
-	
 	public void ExecuteQuery(String query) throws SQLException {
 		Connection connection = getConnection();
 		Statement stmt = connection.createStatement();
@@ -54,7 +42,7 @@ public class DatabaseConnection {
 		connection.close();
 	}
 	
-	private Connection getConnection() throws SQLException {
+	public Connection getConnection() throws SQLException {
 		Connection c = null;
 	    try {
 	    	Class.forName(DRIVER).newInstance();

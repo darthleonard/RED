@@ -3,9 +3,6 @@ package escaner.db;
 import java.sql.SQLException;
 
 public class DatabaseInstaller {
-	
-	// Maybe check if core table(s) exist before calling install
-	// SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}';
 	public void Install(DatabaseConnection connection) throws SQLException {
 		createDeviceTable(connection);
 	}
