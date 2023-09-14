@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import escaner.models.DeviceDataset;
+import escaner.models.DeviceRecord;
 import escaner.services.DeviceStatus;
 import escaner.tools.Archivos;
 import escaner.tools.Mensajes;
@@ -22,7 +24,7 @@ public class TablePanel extends JPanel {
 
 	private JScrollPane scrollPane;
 	private JTable hostsTable;
-	private ArrayList<String[]> dataSource;
+	private DeviceDataset dataSource;
 
 	private final String headers[] = new String[] { "", "IP", "MAC", "Descripcion", "Status" };
 
@@ -32,7 +34,7 @@ public class TablePanel extends JPanel {
 		addComponents();
 	}
 
-	public void setDataSource(ArrayList<String[]> dataSource) {
+	public void setDataSource(DeviceDataset dataSource) {
 		if (this.dataSource == null) {
 			this.dataSource = dataSource;
 		}
@@ -69,10 +71,9 @@ public class TablePanel extends JPanel {
 	}
 
 	public String searchPrevious(String macAddress) {
-		for (int i = 0; i < dataSource.size(); i++) {
-			String[] record = dataSource.get(i);
-			if (record[1].equals(macAddress)) {
-				return record[0];
+		for(DeviceRecord device : dataSource) {
+			if(device.getMacAddress().equals(macAddress)) {
+				return device.getMacAddress();
 			}
 		}
 		return null;
@@ -124,33 +125,33 @@ public class TablePanel extends JPanel {
 		};
 	}
 
-	private void updateTableDta(ArrayList<String[]> dataSource) {
+	private void updateTableDta(DeviceDataset dataSource) {
 		String ip;
 		String mac;
 		String description;
 		int status;
 		DefaultTableModel tableModel = (DefaultTableModel) hostsTable.getModel();
 		clearModel(tableModel);
-		ArrayList<String[]> fileRecords = new ArrayList<String[]>(this.dataSource);
+		ArrayList<DeviceRecord> fileRecords = new ArrayList<DeviceRecord>(this.dataSource);
 
-		for (String data[] : dataSource) {
+		for (DeviceRecord data : dataSource) {
 			status = DeviceStatus.NEW;
-			ip = data[0].trim();
-			mac = data[1].trim();
-			description = data[2].trim();
+			ip = data.getIpAddress();
+			mac = data.getMacAddress();
+			description = data.getDescription();
 
-			for (String record[] : this.dataSource) {
-				if (record[1].equals(mac)) { // la mac ya esta en la lista
+			for (DeviceRecord record : this.dataSource) {
+				if (record.getMacAddress().equals(mac)) { // la mac ya esta en la lista
 					fileRecords.remove(record);
-					if (ip.equals(record[0])) { // la ip no a cambiado
-						if (record[2].length() != 0) { // el registro se encuentra correcto
-							description = record[2];
+					if (ip.equals(record.getIpAddress())) { // la ip no a cambiado
+						if (record.getDescription().length() != 0) { // el registro se encuentra correcto
+							description = record.getDescription();
 							status = DeviceStatus.EXIST;
 						} else { // no se ha identificado
 							status = DeviceStatus.UNKNOWN;
 						}
 					} else { // la ip es dferente
-						description = record[2];
+						description = record.getDescription();
 						status = DeviceStatus.CHANGED;
 					}
 					break;
@@ -160,9 +161,9 @@ public class TablePanel extends JPanel {
 			}
 			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, ip, mac, description, status });
 		}
-		for (String registro[] : fileRecords) {
-			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, registro[0], registro[1], registro[2],
-					DeviceStatus.OFFLINE });
+		for (DeviceRecord registro : fileRecords) {
+			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, registro.getIpAddress(),
+					registro.getMacAddress(), registro.getDescription(), DeviceStatus.OFFLINE });
 		}
 
 		hostsTable.setModel(tableModel);
