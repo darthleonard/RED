@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -64,15 +63,26 @@ public class TablePanel extends JPanel {
 	}
 
 	public void deleteSelectedRecords() {
+		int response = Mensajes.MensajeConfirmacion("Borrar", "El registro se eliminara por completo\n¿Deseas borrar?");
+		if (response != 0) {
+			return;
+		}
 		DefaultTableModel tableModel = (DefaultTableModel) hostsTable.getModel();
 		int[] rows = hostsTable.getSelectedRows();
 		for (int row = rows.length - 1; row >= 0; row--) {
-			tableModel.removeRow(rows[row]);
+			try {
+				String macAddress = (String) tableModel.getValueAt(row, 2);
+				dataSource.Delete(macAddress);
+				tableModel.removeRow(rows[row]);
+			} catch (SQLException e) {
+				Mensajes.MensajeError("Error al eliminar", e.getLocalizedMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void saveTable() {
-		int response = JOptionPane.showConfirmDialog(null, "¿Deseas guardar?", "Guardar", JOptionPane.OK_CANCEL_OPTION);
+		int response = Mensajes.MensajeConfirmacion("Guardar", "¿Deseas guardar?");
 		if (response != 0) {
 			return;
 		}

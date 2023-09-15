@@ -25,6 +25,12 @@ public class DeviceDataset extends ArrayList<DeviceRecord> {
 		}
 	}
 
+	public void Delete(String macAddress) throws SQLException {
+		DeviceRecord record = this.stream().filter(r -> r.getMacAddress().equals(macAddress)).findFirst().orElse(null);
+		this.removeIf(r -> r.getMacAddress().equals(macAddress));
+		record.Delete();
+	}
+	
 	public DeviceRecord FirstOrDefault(Predicate<? super DeviceRecord> predicate) {
 		return this.stream().filter(predicate).findFirst().orElse(null);
 	}

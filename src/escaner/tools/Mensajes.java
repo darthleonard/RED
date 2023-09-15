@@ -22,7 +22,12 @@ public class Mensajes {
     public static void MensajeError(String msj) {
         MensajeError("ERROR", msj);
     }
+    
     public static void MensajeError(String title, String msj) {
         JOptionPane.showMessageDialog(null, msj, title, JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static int MensajeConfirmacion(String title, String msj) {
+    	return JOptionPane.showConfirmDialog(null, msj, title, JOptionPane.OK_CANCEL_OPTION);
     }
 }
