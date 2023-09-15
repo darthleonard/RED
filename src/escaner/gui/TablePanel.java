@@ -39,7 +39,7 @@ public class TablePanel extends JPanel {
 	}
 
 	public void UpdateDataSource(DeviceDataset newRecords) {
-		for (DeviceRecord record : newRecords) {
+		for (DeviceRecord record : dataSource) {
 			record.setStatus(DeviceStatus.OFFLINE);
 		}
 		List<String> currentMacs = dataSource.stream().map(r -> r.getMacAddress()).collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class TablePanel extends JPanel {
 			if (!currentMacs.contains(newRecord.getMacAddress())) {
 				newRecord.setStatus(DeviceStatus.NEW);
 				dataSource.add(newRecord);
-				break;
+				continue;
 			}
 			DeviceRecord record = dataSource.FirstOrDefault(r -> r.getMacAddress().equals(newRecord.getMacAddress()));
 			int currentStatus = DeviceStatus.EXIST;
@@ -71,7 +71,7 @@ public class TablePanel extends JPanel {
 		int[] rows = hostsTable.getSelectedRows();
 		for (int row = rows.length - 1; row >= 0; row--) {
 			try {
-				String macAddress = (String) tableModel.getValueAt(row, 2);
+				String macAddress = (String) tableModel.getValueAt(rows[row], 2);
 				dataSource.Delete(macAddress);
 				tableModel.removeRow(rows[row]);
 			} catch (SQLException e) {
