@@ -17,6 +17,7 @@ import javax.swing.table.TableRowSorter;
 import escaner.models.DeviceDataset;
 import escaner.models.DeviceRecord;
 import escaner.services.DeviceStatus;
+import escaner.tools.Mensajes;
 
 public class TablePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -80,7 +81,7 @@ public class TablePanel extends JPanel {
 			dataSource.SaveAll();
 			UpdateDataSource(dataSource);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(this, "Error al guardar", e.getLocalizedMessage(), JOptionPane.ERROR_MESSAGE);
+			Mensajes.MensajeError("Error al guardar", e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 	}
