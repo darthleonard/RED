@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -18,7 +20,7 @@ import escaner.models.DeviceRecord;
 import escaner.services.DeviceStatus;
 import escaner.tools.Mensajes;
 
-public class TablePanel extends JPanel {
+public class TablePanel extends JPanel implements TableModelListener {
 	private static final long serialVersionUID = 1L;
 
 	private JScrollPane scrollPane;
@@ -105,6 +107,19 @@ public class TablePanel extends JPanel {
 		return null;
 	}
 
+	public void tableChanged(TableModelEvent e) {
+        int row = e.getFirstRow();
+        int column = e.getColumn();
+        TableModel model = (TableModel)e.getSource();
+        if(row == -1 || column == -1) {
+        	return;
+        }
+        String data = (String) model.getValueAt(row, column);
+        String editedMacAddress = (String) model.getValueAt(row, 2);
+        DeviceRecord record = dataSource.FirstOrDefault(r -> r.getMacAddress() == editedMacAddress);
+        record.setDescription(data);
+    }
+	
 	private void initComponents() {
 		scrollPane = new JScrollPane();
 		hostsTable = new JTable();
@@ -133,6 +148,7 @@ public class TablePanel extends JPanel {
 		hideStatusColumn();
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(hostsTable.getModel());
 		hostsTable.setRowSorter(sorter);
+		hostsTable.getModel().addTableModelListener(this);
 	}
 
 	private void addComponents() {
