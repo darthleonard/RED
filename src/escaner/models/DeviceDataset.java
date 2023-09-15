@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import escaner.db.DatabaseConnection;
 
@@ -16,6 +17,16 @@ public class DeviceDataset extends ArrayList<DeviceRecord> {
 
 	public DeviceDataset(String filter) {
 		load();
+	}
+
+	public void SaveAll() throws SQLException {
+		for (DeviceRecord device : this) {
+			device.Save();
+		}
+	}
+
+	public DeviceRecord FirstOrDefault(Predicate<? super DeviceRecord> predicate) {
+		return this.stream().filter(predicate).findFirst().orElse(null);
 	}
 
 	private void load() {
@@ -30,7 +41,7 @@ public class DeviceDataset extends ArrayList<DeviceRecord> {
 				DeviceRecord device = new DeviceRecord();
 				device.setId(rs.getInt("id"));
 				device.setIpAddress(rs.getString("IpAddress"));
-				device.setMacAddress(rs.getString("IpAddress"));
+				device.setMacAddress(rs.getString("MacAddress"));
 				device.setDescription(rs.getString("Description"));
 				add(device);
 			}

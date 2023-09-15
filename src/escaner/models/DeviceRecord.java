@@ -13,6 +13,7 @@ public class DeviceRecord {
 	private String ipAddress;
 	private String macAddress;
 	private String description;
+	private int status;
 
 	public DeviceRecord() {
 	}
@@ -72,6 +73,14 @@ public class DeviceRecord {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	private void executeSelect(Connection connection, int id) throws SQLException {

@@ -49,7 +49,8 @@ public class EscanerFrame extends JFrame {
 	public void loadArpTable() {
 		if (selectedAdapter.isSupported()) {
 			Tool tool = new Tool(currentNetworkIp, currentNetworkMask);
-			tablePanel.setDataSource(tool.getDatos());
+			DeviceDataset devices = tool.getDatos();
+			tablePanel.UpdateDataSource(devices);
 		} else {
 			Mensajes.MensajeError("Error", "El adaptador seleccionado no es soportado");
 		}
@@ -105,6 +106,6 @@ public class EscanerFrame extends JFrame {
 
 	public void loadSavedData() {
 		DeviceDataset devices = new DeviceDataset("");
-		tablePanel.setDataSource(devices);
+		tablePanel.SetDataSource(devices);
 	}
 }

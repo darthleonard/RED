@@ -2,8 +2,9 @@ package escaner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -16,15 +17,13 @@ import javax.swing.table.TableRowSorter;
 import escaner.models.DeviceDataset;
 import escaner.models.DeviceRecord;
 import escaner.services.DeviceStatus;
-import escaner.tools.Archivos;
-import escaner.tools.Mensajes;
 
 public class TablePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JScrollPane scrollPane;
 	private JTable hostsTable;
-	private DeviceDataset dataSource;
+	private DeviceDataset dataSource = new DeviceDataset();
 
 	private final String headers[] = new String[] { "", "IP", "MAC", "Descripcion", "Status" };
 
@@ -34,11 +33,33 @@ public class TablePanel extends JPanel {
 		addComponents();
 	}
 
-	public void setDataSource(DeviceDataset dataSource) {
-		if (this.dataSource == null) {
-			this.dataSource = dataSource;
+	public void SetDataSource(DeviceDataset dataSource) {
+		this.dataSource = dataSource;
+		updateTableData();
+	}
+
+	public void UpdateDataSource(DeviceDataset newRecords) {
+		for (DeviceRecord record : newRecords) {
+			record.setStatus(DeviceStatus.OFFLINE);
 		}
-		updateTableDta(dataSource);
+		List<String> currentMacs = dataSource.stream().map(r -> r.getMacAddress()).collect(Collectors.toList());
+		for (DeviceRecord newRecord : newRecords) {
+			if (!currentMacs.contains(newRecord.getMacAddress())) {
+				newRecord.setStatus(DeviceStatus.NEW);
+				dataSource.add(newRecord);
+				break;
+			}
+			DeviceRecord record = dataSource.FirstOrDefault(r -> r.getMacAddress().equals(newRecord.getMacAddress()));
+			int currentStatus = DeviceStatus.EXIST;
+			if (!record.getIpAddress().equals(newRecord.getIpAddress())) {
+				currentStatus = DeviceStatus.CHANGED;
+			}
+			if (record.getDescription().isEmpty()) {
+				currentStatus = DeviceStatus.UNKNOWN;
+			}
+			record.setStatus(currentStatus);
+		}
+		updateTableData();
 	}
 
 	public void deleteSelectedRecords() {
@@ -51,28 +72,22 @@ public class TablePanel extends JPanel {
 
 	public void saveTable() {
 		int response = JOptionPane.showConfirmDialog(null, "¿Deseas guardar?", "Guardar", JOptionPane.OK_CANCEL_OPTION);
-		if (response == 0) {
-			try {
-				Archivos archivos = new Archivos();
-				ArrayList<String[]> dataSource = new ArrayList<String[]>();
-				TableModel tableModel = hostsTable.getModel();
-				tableModel.getColumnCount();
-				int rowsCount = tableModel.getRowCount();
+		if (response != 0) {
+			return;
+		}
 
-				for (int i = 0; i < rowsCount; i++) {
-					dataSource.add(new String[] { tableModel.getValueAt(i, 1).toString(),
-							tableModel.getValueAt(i, 2).toString(), tableModel.getValueAt(i, 3).toString() });
-				}
-				archivos.Guardar(dataSource);
-			} catch (FileNotFoundException ex) {
-				Mensajes.MensajeError("ERROR", "No se localizo el archivo de datos");
-			}
+		try {
+			dataSource.SaveAll();
+			UpdateDataSource(dataSource);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(this, "Error al guardar", e.getLocalizedMessage(), JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 		}
 	}
 
 	public String searchPrevious(String macAddress) {
-		for(DeviceRecord device : dataSource) {
-			if(device.getMacAddress().equals(macAddress)) {
+		for (DeviceRecord device : dataSource) {
+			if (device.getMacAddress().equals(macAddress)) {
 				return device.getMacAddress();
 			}
 		}
@@ -125,45 +140,12 @@ public class TablePanel extends JPanel {
 		};
 	}
 
-	private void updateTableDta(DeviceDataset dataSource) {
-		String ip;
-		String mac;
-		String description;
-		int status;
+	private void updateTableData() {
 		DefaultTableModel tableModel = (DefaultTableModel) hostsTable.getModel();
 		clearModel(tableModel);
-		ArrayList<DeviceRecord> fileRecords = new ArrayList<DeviceRecord>(this.dataSource);
-
-		for (DeviceRecord data : dataSource) {
-			status = DeviceStatus.NEW;
-			ip = data.getIpAddress();
-			mac = data.getMacAddress();
-			description = data.getDescription();
-
-			for (DeviceRecord record : this.dataSource) {
-				if (record.getMacAddress().equals(mac)) { // la mac ya esta en la lista
-					fileRecords.remove(record);
-					if (ip.equals(record.getIpAddress())) { // la ip no a cambiado
-						if (record.getDescription().length() != 0) { // el registro se encuentra correcto
-							description = record.getDescription();
-							status = DeviceStatus.EXIST;
-						} else { // no se ha identificado
-							status = DeviceStatus.UNKNOWN;
-						}
-					} else { // la ip es dferente
-						description = record.getDescription();
-						status = DeviceStatus.CHANGED;
-					}
-					break;
-				} else { // la mac no esta en la lista
-					status = DeviceStatus.NEW;
-				}
-			}
-			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, ip, mac, description, status });
-		}
-		for (DeviceRecord registro : fileRecords) {
+		for (DeviceRecord registro : dataSource) {
 			tableModel.addRow(new Object[] { tableModel.getRowCount() + 1, registro.getIpAddress(),
-					registro.getMacAddress(), registro.getDescription(), DeviceStatus.OFFLINE });
+					registro.getMacAddress(), registro.getDescription(), registro.getStatus() });
 		}
 
 		hostsTable.setModel(tableModel);
