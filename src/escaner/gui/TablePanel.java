@@ -99,12 +99,11 @@ public class TablePanel extends JPanel implements TableModelListener {
 	}
 
 	public String searchPrevious(String macAddress) {
-		for (DeviceRecord device : dataSource) {
-			if (device.getMacAddress().equals(macAddress)) {
-				return device.getMacAddress();
-			}
+		DeviceRecord record = dataSource.FirstOrDefault(r -> r.getMacAddress() == macAddress);
+		if(record == null) {
+			return null;
 		}
-		return null;
+		return record.getIpAddress();
 	}
 
 	public void tableChanged(TableModelEvent e) {
