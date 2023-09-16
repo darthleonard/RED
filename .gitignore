@@ -27,3 +27,4 @@ hs_err_pid*
 /directorio*.sc
 /eclipse token
 /red.db
+/red.db.bak
