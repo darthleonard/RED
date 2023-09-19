@@ -3,6 +3,8 @@ package escaner.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ public class TablePanel extends JPanel implements TableModelListener {
 	private JScrollPane scrollPane;
 	private JTable hostsTable;
 	private DeviceDataset dataSource = new DeviceDataset();
+	private Dictionary<String, String> dictionary;
 
 	private final String headers[] = new String[] { "", "IP", "MAC", "Descripcion", "Status" };
 
@@ -41,8 +44,10 @@ public class TablePanel extends JPanel implements TableModelListener {
 	}
 
 	public void UpdateDataSource(DeviceDataset newRecords) {
+		dictionary = new Hashtable<>();
 		for (DeviceRecord record : dataSource) {
 			record.setStatus(DeviceStatus.OFFLINE);
+			dictionary.put(record.getMacAddress(), record.getIpAddress());
 		}
 		List<String> currentMacs = dataSource.stream().map(r -> r.getMacAddress()).collect(Collectors.toList());
 		for (DeviceRecord newRecord : newRecords) {
@@ -54,6 +59,7 @@ public class TablePanel extends JPanel implements TableModelListener {
 			DeviceRecord record = dataSource.FirstOrDefault(r -> r.getMacAddress().equals(newRecord.getMacAddress()));
 			int currentStatus = DeviceStatus.EXIST;
 			if (!record.getIpAddress().equals(newRecord.getIpAddress())) {
+				record.setIpAddress(newRecord.getIpAddress());
 				currentStatus = DeviceStatus.CHANGED;
 			}
 			if (record.getDescription().isEmpty()) {
@@ -99,11 +105,7 @@ public class TablePanel extends JPanel implements TableModelListener {
 	}
 
 	public String searchPrevious(String macAddress) {
-		DeviceRecord record = dataSource.FirstOrDefault(r -> r.getMacAddress() == macAddress);
-		if(record == null) {
-			return null;
-		}
-		return record.getIpAddress();
+		return dictionary.get(macAddress);
 	}
 
 	public void tableChanged(TableModelEvent e) {
